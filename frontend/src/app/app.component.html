@@ -1,39 +1,75 @@
-<mat-card class="main-content">
-
-  <mat-card-content>
-    <mat-card-title class="main-title">
-      Forums
-    </mat-card-title>
-    <br>
-    <form #ForumsForm="ngForm">
-      <mat-form-field class="example-full-width">
-        <mat-label>Day of forum</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let day of days" [value]="day">
-            {{day.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+<mat-sidenav-container class="main-container">
+  <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
+  <mat-sidenav-content class="main-sidenav-content">
+    <mat-card class="main-card">
+    <mat-card-content class="main-content">
+      <mat-card-title class="main-title">
+        Forums
+      </mat-card-title>
       <br>
-      <button type="submit" mat-raised-button (click)="getResult()" [disabled]="ForumsForm.invalid">
-        Calculate this month's forum!
-      </button>
-    </form>
-    <br>
-    Forum history:
-    <table mat-table [dataSource]="forums">
-      <mat-text-column name="day"></mat-text-column>
-      <tr mat-header-row *matHeaderRowDef="forumsTableColumnsToDisplay"></tr>
-      <tr mat-row *matRowDef="let myRowData; columns: forumsTableColumnsToDisplay"></tr>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </table>
+      <form #ForumsForm="ngForm">
+        <mat-form-field>
+          <mat-label>Day of forum</mat-label>
+          <mat-select name="forum-day" [disabled]="!currentUser.isAdmin" [(ngModel)]="dayOfForum">
+            <mat-option *ngFor="let day of days" [value]="day">
+              yo
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <button type="submit" mat-raised-button (click)="getResult()" [disabled]="ForumsForm.invalid">
+          Calculate this month's forum!
+        </button>
 
-    Users:
-    <table mat-table [dataSource]="users">
-      <mat-text-column name="day"></mat-text-column>
-      <tr mat-header-row *matHeaderRowDef="usersTableColumnsToDisplay"></tr>
-      <tr mat-row *matRowDef="let myRowData; columns: usersTableColumnsToDisplay"></tr>
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-    </table>
-  </mat-card-content>
-</mat-card>
+      </form>
+      <br>
+      Forum history:
+      <table mat-table [dataSource]="forumsDataSource">
+        <!-- Users Column -->
+        <ng-container matColumnDef="users">
+          <th mat-header-cell *matHeaderCellDef> Users</th>
+          <td mat-cell *matCellDef="let forum">
+          <span *ngFor="let user of forum.users">
+            {{user.username}}
+          </span>
+          </td>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date</th>
+          <td mat-cell *matCellDef="let forum"> {{forum.date | date}} </td>
+        </ng-container>
+
+        <!-- Notes Column -->
+        <ng-container matColumnDef="notes">
+          <th mat-header-cell *matHeaderCellDef> Notes</th>
+          <td mat-cell *matCellDef="let forum"> {{forum.notes}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="forumsTableColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: forumsTableColumnsToDisplay;"></tr>
+      </table>
+
+      Users:
+      <table mat-table [dataSource]="usersDataSource">
+
+        <!-- Username Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef> Username</th>
+          <td mat-cell *matCellDef="let user"> {{user.username}} </td>
+        </ng-container>
+
+        <!-- Number of forums Column -->
+        <ng-container matColumnDef="forumCount">
+          <th mat-header-cell *matHeaderCellDef> Number of forums</th>
+          <td mat-cell *matCellDef="let user"> {{user.forumCount}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="usersTableColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: usersTableColumnsToDisplay;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+  </mat-sidenav-content>
+</mat-sidenav-container>

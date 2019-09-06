@@ -1,9 +1,44 @@
-.main-content {
-  width: 50%;
-  margin: auto;
-  text-align: center;
-}
+.main-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eee;
 
-.main-title {
-  text-align: center;
+  .main-sidenav-content {
+    display: flex;
+    justify-items: center;
+
+    .main-card {
+      width: 50%;
+      margin: auto;
+      text-align: center;
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        table, form {
+          margin-top: 8px;
+          margin-bottom: 8px;
+        }
+
+        table {
+          width: 75%;
+          th.mat-header-cell {
+            text-align: center;
+          }
+          tr td {
+            white-space: nowrap;
+          }
+        }
+
+        .main-title {
+          text-align: center;
+        }
+      }
+    }
+  }
 }

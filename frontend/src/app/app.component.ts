@@ -1,5 +1,9 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ApiService} from './api.service';
+import {DataService} from './data.service';
+import {User} from './user';
+import {MatTableDataSource} from '@angular/material/table';
+import {Forum} from './forum';
 
 @Component({
   selector: 'app-root',
@@ -7,7 +11,9 @@ import {ApiService} from './api.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  currentUser = null;
   apiService = null;
+  dataService = null;
   title = 'forums';
   result = null;
   dayOfForum = null;
@@ -30,12 +36,31 @@ export class AppComponent {
     }
   ];
   forums = [];
-  users = [];
-  forumsTableColumnsToDisplay = ['day', 'username', 'notes'];
-  usersTableColumnsToDisplay = ['day', 'username', 'notes'];
+  users: User[] = [];
+  forumsTableColumnsToDisplay = ['date', 'users', 'notes'];
+  usersTableColumnsToDisplay = ['username', 'forumCount'];
+  forumsDataSource: MatTableDataSource<Forum>;
+  usersDataSource: MatTableDataSource<User>;
 
-  constructor(apiService: ApiService) {
+  constructor(apiService: ApiService, dataService: DataService) {
     this.apiService = apiService;
+    this.dataService = dataService;
+    this.currentUser = this.dataService.currentUser;
+    this.dataService.getCurrentUser().subscribe((CurrentUser) => {
+      this.currentUser = CurrentUser;
+    });
+    this.dataService.getForums(this.dataService.currentUser).subscribe((Forums) => {
+      for (const forum of Forums) {
+        this.forums.push(forum);
+      }
+      this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
+    });
+    this.dataService.getUsers(this.dataService.currentUser).subscribe((Users) => {
+      for (const user of Users) {
+        this.users.push(user);
+      }
+      this.usersDataSource = new MatTableDataSource<User>(this.users);
+    });
   }
 
   getResult() {
