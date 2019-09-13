@@ -19,6 +19,9 @@
         .main-container .main-sidenav-content .main-card .main-content table, .main-container .main-sidenav-content .main-card .main-content form {
           margin-top: 8px;
           margin-bottom: 8px; }
+        .main-container .main-sidenav-content .main-card .main-content form {
+          display: flex;
+          flex-direction: column; }
         .main-container .main-sidenav-content .main-card .main-content table {
           width: 75%; }
           .main-container .main-sidenav-content .main-card .main-content table th.mat-header-cell {

@@ -1,0 +1,4 @@
+forum_venv/
+*.pyc
+*.scssc
+*.map

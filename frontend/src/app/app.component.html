@@ -10,11 +10,19 @@
       <form #ForumsForm="ngForm">
         <mat-form-field>
           <mat-label>Day of forum</mat-label>
-          <mat-select name="forum-day" [disabled]="!currentUser.isAdmin" [(ngModel)]="dayOfForum">
+          <mat-select name="forum-day" [disabled]="!currentUser.isAdmin" name="dayOfForum" [(ngModel)]="dayOfForum">
             <mat-option *ngFor="let day of days" [value]="day">
-              yo
+              {{day.name}}
             </mat-option>
           </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Number of organizers</mat-label>
+          <input matInput [disabled]="!currentUser.isAdmin" name="numberOfOrganizers" [(ngModel)]="numberOfOrganizers">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Frequency (in weeks)</mat-label>
+          <input matInput [disabled]="!currentUser.isAdmin" name="forumFrequency" [(ngModel)]="forumFrequency">
         </mat-form-field>
         <br>
         <button type="submit" mat-raised-button (click)="getResult()" [disabled]="ForumsForm.invalid">
@@ -29,22 +37,53 @@
         <ng-container matColumnDef="users">
           <th mat-header-cell *matHeaderCellDef> Users</th>
           <td mat-cell *matCellDef="let forum">
-          <span *ngFor="let user of forum.users">
-            {{user.username}}
-          </span>
+            <mat-form-field class="forum-users-chip-list">
+              <mat-chip-list #chipList aria-label="User selection">
+                <mat-chip
+                  *ngFor="let user of forum.users"
+                  [selectable]="false"
+                  [removable]="true"
+                  (removed)="removeUserFromForum(user, forum)">
+                  {{user.username}}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input
+                  placeholder="Add User"
+                  #fruitInput
+                  [formControl]="userChipCtrl"
+                  [matAutocomplete]="auto"
+                  [matChipInputFor]="chipList"
+                  [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                  [matChipInputAddOnBlur]="true"
+                  (matChipInputTokenEnd)="addUserToForum($event, forum)">
+              </mat-chip-list>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let user of users" [value]="user">
+                  {{user.username}}
+                </mat-option>
+              </mat-autocomplete>
+          </mat-form-field>
           </td>
         </ng-container>
 
         <!-- Date Column -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef> Date</th>
-          <td mat-cell *matCellDef="let forum"> {{forum.date | date}} </td>
+          <td mat-cell *matCellDef="let forum">
+            <mat-form-field>
+              <input matInput type="date" [disabled]="!currentUser.isAdmin" value="{{forum.date | date:'yyyy-MM-dd'}}">
+            </mat-form-field>
+          </td>
         </ng-container>
 
         <!-- Notes Column -->
         <ng-container matColumnDef="notes">
           <th mat-header-cell *matHeaderCellDef> Notes</th>
-          <td mat-cell *matCellDef="let forum"> {{forum.notes}} </td>
+          <td mat-cell *matCellDef="let forum">
+            <mat-form-field>
+              <input matInput [disabled]="!currentUser.isAdmin" value="{{forum.notes}}">
+            </mat-form-field>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="forumsTableColumnsToDisplay"></tr>
