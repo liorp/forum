@@ -13,4 +13,4 @@ from backend.auth.models import User
 class Forum(models.Model):
     date = models.DateField()
     notes = models.TextField()
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, related_name='forums')
