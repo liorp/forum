@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 from rest_framework import routers
-from backend.auth.views import UserViewSet, MadorViewSet
-from backend.forum.views import ForumViewSet
+from custom_auth.views import UserViewSet, MadorViewSet
+from forum.views import ForumViewSet
 
 router = routers.DefaultRouter()
 router.register(r'user', UserViewSet)

@@ -4,7 +4,7 @@
     Date: 13/09/2019
 """
 from rest_framework import serializers
-from backend.forum.models import Forum
+from forum.models import Forum
 
 
 class ForumSerializer(serializers.ModelSerializer):
