@@ -22,7 +22,7 @@ class Mador(models.Model):
         (THURSDAY, 'Thursday'),
         (FRIDAY, 'Friday'),
     )
-    forum_day = models.CharField(max_length=2, choices=DAYS, default=THURSDAY)
+    forum_day = models.IntegerField(choices=DAYS, default=THURSDAY)
     name = models.CharField()
     forum_frequency = models.IntegerField()
     number_of_organizers = models.IntegerField()
