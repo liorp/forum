@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'custom_auth',
-    'forum'
+    'forum',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -109,6 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'custom_auth.User'
 
+AUTHENTICATION_BACKENDS = [
+    "django_auth_ldap.backend.LDAPBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -132,6 +138,9 @@ STATIC_URL = '/static/'
 
 # REST Framework
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
     # Use Django's standard `django.contrib.custom_auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
@@ -140,3 +149,23 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+"""
+# ACTIVE DIRECTORY SETTINGS
+
+# AD_DNS_NAME should set to the AD DNS name of the domain (ie; example.com)
+# If you are not using the AD server as your DNS, it can also be set to
+# FQDN or IP of the AD server.
+
+AD_DNS_NAME = 'example.com'
+AD_LDAP_PORT = 389
+
+AD_SEARCH_DN = 'CN=Users,dc=example,dc=com'
+
+# This is the NT4/Samba domain name
+AD_NT4_DOMAIN = 'EXAMPLE'
+
+AD_SEARCH_FIELDS = ['mail','givenName','sn','sAMAccountName']
+
+AD_LDAP_URL = 'ldap://%s:%s' % (AD_DNS_NAME,AD_LDAP_PORT)
+"""

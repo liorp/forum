@@ -7,14 +7,8 @@ import {Forum} from './forum';
   providedIn: 'root'
 })
 export class DataService {
-  private _users = new BehaviorSubject<User[]>([]);
-  private _forums = new BehaviorSubject<Forum[]>([]);
-  private _currentUser = new BehaviorSubject<User>(null);
   private baseUrl = '';
   private dataStore: { users: User[], currentUser: User } = {users: [], currentUser: null};
-  readonly users = this._users.asObservable();
-  readonly forums = this._forums.asObservable();
-  readonly currentUser = this._currentUser.asObservable();
 
   getUsers(user: User) {
     const users = [new User(0, 'liorpo', true, 3),
@@ -43,6 +37,12 @@ export class DataService {
   getFrequency() {
     const _frequency = new BehaviorSubject<number>(1);
     return _frequency.asObservable();
+  }
+
+  getMadorForumAdmin() {
+    const madorForumAdmin = new User(0, 'liorpo', true, 3);
+    const _madorForumAdmin = new BehaviorSubject<User>(madorForumAdmin);
+    return _madorForumAdmin.asObservable();
   }
 
   constructor() {

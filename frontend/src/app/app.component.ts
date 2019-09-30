@@ -16,6 +16,7 @@ export class AppComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   userChipCtrl = new FormControl();
   currentUser = null;
+  madorForumAdmin = null;
   apiService = null;
   dataService = null;
   title = 'forums';
@@ -74,48 +75,14 @@ export class AppComponent {
       this.dataService.getFrequency().subscribe((forumFrequency) => {
         this.forumFrequency = forumFrequency;
       });
+      this.dataService.getMadorForumAdmin().subscribe((madorForumAdmin) => {
+        this.madorForumAdmin = madorForumAdmin;
+      });
     });
   }
 
-  getResult() {
-    const now = new Date(Date.now());
-    const month = now.getMonth();
-    const year = now.getFullYear();
-    const daysOfForum = this.getDaysOfForumInMonth(this.dayOfForum.value, month, year, this.forumFrequency);
-    let i = 0;
-    for (const day of daysOfForum) {
-      const users = this.getUsersForForum(this.numberOfOrganizers);
-      for (const user of users) {
-        user.forumCount += 1;
-      }
-      const forum = new Forum(i, users, day, 'Note');
-      this.forums.push(forum);
-      i += 1;
-    }
-    this.forumsTable.renderRows();
-    this.usersTable.renderRows();
-  }
-
-  getUsersForForum(numberOfUsers) {
-    this.users.sort((a, b) => (a.forumCount > b.forumCount) ? -1 : 1);
-    return this.users.slice(0, numberOfUsers);
-  }
-
-  getDaysOfForumInMonth(dayOfForum, month, year, forumFrequency) {
-    const date = new Date(Date.UTC(year, month, 1));
-    const days = [];
-    let increment = 1;
-    while (date.getMonth() === month) {
-      if (date.getDay() === dayOfForum) {
-        days.push(new Date(date));
-        if (increment === 1) {
-          // Increase the increment in order to calculate faster
-          increment = 7 * forumFrequency;
-        }
-      }
-      date.setDate(date.getDate() + increment);
-    }
-    return days;
+  addForums() {
+    return;
   }
 
   removeUserFromForum(user, forum) {
