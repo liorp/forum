@@ -121,7 +121,7 @@ AUTHENTICATION_BACKENDS = [
 
 LANGUAGE_CODE = 'he'
 
-TIME_ZONE = 'IST'
+TIME_ZONE = 'Asia/Jerusalem'
 
 USE_I18N = True
 

@@ -4,7 +4,7 @@
     Date: 13.09.2019
 """
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Permission
 
 
 class Mador(models.Model):
@@ -23,16 +23,17 @@ class Mador(models.Model):
         (FRIDAY, 'Friday'),
     )
     forum_day = models.IntegerField(choices=DAYS, default=THURSDAY)
-    name = models.CharField()
+    name = models.CharField(max_length=50)
     forum_frequency = models.IntegerField()
     number_of_organizers = models.IntegerField()
-    admin = models.OneToOneField('custom_auth.models.User',
+    admin = models.OneToOneField('custom_auth.User',
                                  models.deletion.SET_NULL,
-                                 related_name='administered_forum')
+                                 related_name='administered_forum',
+                                 null=True)
 
 
 class User(AbstractUser):
-    mador = models.OneToOneField(Mador, models.deletion.SET_NULL, related_name='users')
+    mador = models.OneToOneField(Mador, models.deletion.SET_NULL, related_name='users', null=True)
 
     @property
     def is_admin_of_mador(self):
