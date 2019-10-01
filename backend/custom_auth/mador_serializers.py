@@ -20,10 +20,12 @@ class UserForMadorSerializer(serializers.ModelSerializer):
 
 class MadorSerializer(serializers.ModelSerializer):
     users = UserForMadorSerializer(many=True)
+    admin = UserForMadorSerializer()
+    forum_day = serializers.IntegerField()
 
     class Meta:
         model = Mador
-        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day']
+        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admin', 'number_of_organizers']
 
     def create(self, validated_data):
         return Mador.objects.create(**validated_data)

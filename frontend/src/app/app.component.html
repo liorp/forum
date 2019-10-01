@@ -10,8 +10,8 @@
         <form #ForumsForm="ngForm">
           <mat-form-field>
             <mat-label>Day of forum</mat-label>
-            <mat-select [disabled]="!currentUser.is_admin_of_mador" name="dayOfForum" [(ngModel)]="currentMador.dayOfForum">
-              <mat-option *ngFor="let day of days" [value]="day">
+            <mat-select [disabled]="!currentUser.is_admin_of_mador" name="dayOfForum" [(ngModel)]="currentMador.forum_day">
+              <mat-option *ngFor="let day of days" [value]="day.value">
                 {{day.name}}
               </mat-option>
             </mat-select>
@@ -19,11 +19,11 @@
           <mat-form-field>
             <mat-label>Number of organizers</mat-label>
             <input matInput [disabled]="!currentUser.is_admin_of_mador" name="numberOfOrganizers"
-                   [(ngModel)]="currentMador.numberOfOrganizers">
+                   [(ngModel)]="currentMador.number_of_organizers">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Frequency (in weeks)</mat-label>
-            <input matInput [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency" [(ngModel)]="currentMador.forumFrequency">
+            <input matInput [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency" [(ngModel)]="currentMador.forum_frequency">
           </mat-form-field>
           <mat-form-field class="forum-users-chip-list">
             <mat-label>Mador's forum admin</mat-label>
@@ -31,7 +31,7 @@
               <mat-chip
                 [selectable]="false"
                 [removable]="false">
-                {{currentMador.madorForumAdmin.username}}
+                {{currentMador.admin.username}}
                 <mat-icon matChipRemove>cancel</mat-icon>
               </mat-chip>
             </mat-chip-list>
@@ -119,7 +119,7 @@
           <!-- Number of forums Column -->
           <ng-container matColumnDef="forumCount">
             <th mat-header-cell *matHeaderCellDef> Number of forums</th>
-            <td mat-cell *matCellDef="let user"> {{user.forumCount}} </td>
+            <td mat-cell *matCellDef="let user"> {{user.forum_count}} </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="usersTableColumnsToDisplay"></tr>
