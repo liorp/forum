@@ -16,7 +16,13 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { RestangularModule, Restangular } from 'ngx-restangular';
 
+// Function for setting the default restangular configuration
+export function RestangularConfigFactory(RestangularProvider) {
+  RestangularProvider.setBaseUrl('https://localhost:1337/');
+  // RestangularProvider.setDefaultHeaders({Authorization: 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+}
 
 @NgModule({
   declarations: [
@@ -38,7 +44,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatChipsModule,
     MatIconModule,
     ReactiveFormsModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    RestangularModule.forRoot(RestangularConfigFactory),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -16,12 +16,10 @@ export class AppComponent {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   userChipCtrl = new FormControl();
   currentUser = null;
-  madorForumAdmin = null;
+  currentMador = null;
   apiService = null;
   dataService = null;
   title = 'forums';
-  numberOfOrganizers = null;
-  forumFrequency = null;
   days = [
     {
       name: 'Sunday',
@@ -40,7 +38,6 @@ export class AppComponent {
       value: 4
     }
   ];
-  dayOfForum = this.days[4];
   forums = [];
   users: User[] = [];
   forumsTableColumnsToDisplay = ['date', 'users', 'notes'];
@@ -57,6 +54,7 @@ export class AppComponent {
     this.dataService = dataService;
     this.dataService.getCurrentUser().subscribe((currentUser) => {
       this.currentUser = currentUser;
+      this.currentMador = this.currentUser.mador;
       this.dataService.getForums(this.currentUser).subscribe((forums) => {
         for (const forum of forums) {
           this.forums.push(forum);
@@ -68,15 +66,6 @@ export class AppComponent {
           this.users.push(user);
         }
         this.usersDataSource = new MatTableDataSource<User>(this.users);
-      });
-      this.dataService.getNumberOfOrganizers().subscribe((numberOfOrganizers) => {
-        this.numberOfOrganizers = numberOfOrganizers;
-      });
-      this.dataService.getFrequency().subscribe((forumFrequency) => {
-        this.forumFrequency = forumFrequency;
-      });
-      this.dataService.getMadorForumAdmin().subscribe((madorForumAdmin) => {
-        this.madorForumAdmin = madorForumAdmin;
       });
     });
   }

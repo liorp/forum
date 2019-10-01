@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {User} from './user';
 import {BehaviorSubject} from 'rxjs';
 import {Forum} from './forum';
+import {Restangular} from 'ngx-restangular';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,14 @@ import {Forum} from './forum';
 export class DataService {
   private baseUrl = '';
   private dataStore: { users: User[], currentUser: User } = {users: [], currentUser: null};
+  private restangular = null;
+
+  constructor(private restangular: Restangular) {
+    this.restangular = restangular;
+  }
 
   getUsers(user: User) {
+    return this.restangular.all('users').getList();
     const users = [new User(0, 'liorpo', true, 3),
       new User(0, 'anotheruser', false, 3)];
     const _users = new BehaviorSubject<User[]>(users);
@@ -18,6 +25,7 @@ export class DataService {
   }
 
   getForums(user: User) {
+    return this.restangular.all('forums').getList();
     const forums = [new Forum(0, [new User(0, 'liorpo', true, 3)], new Date(Date.now()), 'Best forum ever')];
     const _forums = new BehaviorSubject<Forum[]>(forums);
     return _forums.asObservable();
@@ -27,24 +35,5 @@ export class DataService {
     const currentUser = new User(0, 'liorpo', true, 3);
     const _currentUser = new BehaviorSubject<User>(currentUser);
     return _currentUser.asObservable();
-  }
-
-  getNumberOfOrganizers() {
-    const _numberOfOrganizers = new BehaviorSubject<number>(2);
-    return _numberOfOrganizers.asObservable();
-  }
-
-  getFrequency() {
-    const _frequency = new BehaviorSubject<number>(1);
-    return _frequency.asObservable();
-  }
-
-  getMadorForumAdmin() {
-    const madorForumAdmin = new User(0, 'liorpo', true, 3);
-    const _madorForumAdmin = new BehaviorSubject<User>(madorForumAdmin);
-    return _madorForumAdmin.asObservable();
-  }
-
-  constructor() {
   }
 }
