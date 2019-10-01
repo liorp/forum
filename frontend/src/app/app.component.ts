@@ -52,7 +52,7 @@ export class AppComponent {
   constructor(apiService: ApiService, dataService: DataService) {
     this.apiService = apiService;
     this.dataService = dataService;
-    this.dataService.getCurrentUser().subscribe((currentUser) => {
+    this.dataService.login().subscribe((currentUser) => {
       this.currentUser = currentUser;
       this.currentMador = this.currentUser.mador;
       this.dataService.getForums(this.currentUser).subscribe((forums) => {

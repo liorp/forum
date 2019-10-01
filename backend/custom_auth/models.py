@@ -33,8 +33,9 @@ class Mador(models.Model):
 
 
 class User(AbstractUser):
-    mador = models.OneToOneField(Mador, models.deletion.SET_NULL, related_name='users', null=True)
+    mador = models.ForeignKey(Mador, models.deletion.SET_NULL, related_name='users', null=True)
+    name = models.CharField(max_length=180, null=True)
 
     @property
     def is_admin_of_mador(self):
-        return self.administered_forum is not None
+        return hasattr(self, 'administered_forum')

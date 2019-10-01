@@ -7,6 +7,7 @@ import base64
 import struct
 import ldap
 
+from custom_auth.mador_serializers import MadorSerializer
 from custom_auth.models import User
 from django.conf import settings
 from django.http import JsonResponse, HttpResponse
@@ -134,5 +135,5 @@ def login_user(request):
         "user": user.username,
         "token": token.key,
         "is_admin_of_mador": user.is_admin_of_mador,
-        "mador": user.mador
+        "mador": MadorSerializer(user.mador).data
     })

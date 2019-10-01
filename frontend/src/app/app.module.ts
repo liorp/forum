@@ -1,7 +1,7 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -11,12 +11,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { HttpClientModule } from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import { RestangularModule, Restangular } from 'ngx-restangular';
+import {RestangularModule, Restangular} from 'ngx-restangular';
 
 // Function for setting the default restangular configuration
 export function RestangularConfigFactory(RestangularProvider) {
@@ -25,12 +25,16 @@ export function RestangularConfigFactory(RestangularProvider) {
   RestangularProvider.addElementTransformer('auth', true, (auth) => {
     // This will add a method called login that will do a POST to the path login
     // signature is (name, operation, path, params, headers, elementToPost)
-
     auth.addRestangularMethod('login', 'post', 'login');
-
     return auth;
   });
-  // RestangularProvider.setDefaultHeaders({Authorization: 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
+  RestangularProvider.addResponseInterceptor((data, operation, what, url, response) => {
+    if (data.results) {
+      return data.results;
+    } else {
+      return data;
+    }
+  });
 }
 
 @NgModule({
@@ -59,4 +63,5 @@ export function RestangularConfigFactory(RestangularProvider) {
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

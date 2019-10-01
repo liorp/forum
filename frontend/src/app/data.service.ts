@@ -8,13 +8,19 @@ import {Mador} from './mador';
   providedIn: 'root'
 })
 export class DataService {
-  private currentUser = null;
+  currentUser = null;
 
   constructor(private restangular: Restangular) {
-    restangular.all('auth').login({}).subscribe((user) => {
+    this.login();
+  }
+
+  login() {
+    const login = this.restangular.all('auth').login();
+    login.subscribe((user) => {
       this.currentUser = user;
-      restangular.provider.setDefaultHeaders({Authorization: 'Token ' + user.token});
+      this.restangular.provider.setDefaultHeaders({Authorization: 'Token ' + user.token});
     });
+    return login;
   }
 
   getUsers() {
@@ -23,11 +29,6 @@ export class DataService {
 
   getForums() {
     return this.restangular.all('forum').getList();
-  }
-
-  getCurrentUser() {
-    const currentUser = new BehaviorSubject<any>(this.currentUser);
-    return currentUser.asObservable();
   }
 
   updateForum(forum: Forum) {

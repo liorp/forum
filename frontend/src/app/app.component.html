@@ -1,7 +1,7 @@
 <mat-sidenav-container class="main-container">
   <mat-sidenav mode="side" opened>Sidenav content</mat-sidenav>
   <mat-sidenav-content class="main-sidenav-content">
-    <mat-card class="main-card">
+    <mat-card class="main-card" *ngIf="currentUser && currentMador">
       <mat-card-content class="main-content">
         <mat-card-title class="main-title">
           Forums
@@ -10,7 +10,7 @@
         <form #ForumsForm="ngForm">
           <mat-form-field>
             <mat-label>Day of forum</mat-label>
-            <mat-select [disabled]="!currentUser.isAdmin" name="dayOfForum" [(ngModel)]="currentMador.dayOfForum">
+            <mat-select [disabled]="!currentUser.is_admin_of_mador" name="dayOfForum" [(ngModel)]="currentMador.dayOfForum">
               <mat-option *ngFor="let day of days" [value]="day">
                 {{day.name}}
               </mat-option>
@@ -18,16 +18,16 @@
           </mat-form-field>
           <mat-form-field>
             <mat-label>Number of organizers</mat-label>
-            <input matInput [disabled]="!currentUser.isAdmin" name="numberOfOrganizers"
+            <input matInput [disabled]="!currentUser.is_admin_of_mador" name="numberOfOrganizers"
                    [(ngModel)]="currentMador.numberOfOrganizers">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Frequency (in weeks)</mat-label>
-            <input matInput [disabled]="!currentUser.isAdmin" name="forumFrequency" [(ngModel)]="currentMador.forumFrequency">
+            <input matInput [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency" [(ngModel)]="currentMador.forumFrequency">
           </mat-form-field>
           <mat-form-field class="forum-users-chip-list">
             <mat-label>Mador's forum admin</mat-label>
-            <mat-chip-list #chipList aria-label="User selection" [disabled]="!currentUser.isAdmin">
+            <mat-chip-list #chipList aria-label="User selection" [disabled]="!currentUser.is_admin_of_mador">
               <mat-chip
                 [selectable]="false"
                 [removable]="false">
@@ -87,7 +87,7 @@
             <th mat-header-cell *matHeaderCellDef> Date</th>
             <td mat-cell *matCellDef="let forum">
               <mat-form-field>
-                <input matInput type="date" [disabled]="!currentUser.isAdmin"
+                <input matInput type="date" [disabled]="!currentUser.is_admin_of_mador"
                        value="{{forum.date | date:'yyyy-MM-dd'}}">
               </mat-form-field>
             </td>
@@ -98,7 +98,7 @@
             <th mat-header-cell *matHeaderCellDef> Notes</th>
             <td mat-cell *matCellDef="let forum">
               <mat-form-field>
-                <input matInput [disabled]="!currentUser.isAdmin" value="{{forum.notes}}">
+                <input matInput [disabled]="!currentUser.is_admin_of_mador" value="{{forum.notes}}">
               </mat-form-field>
             </td>
           </ng-container>

@@ -1,13 +1,13 @@
 """
     Author: Lior Pollak
     Description: Serializers for the custom_auth app
-    Date: 13/09/2019
+    Date: 01/10/2019
 """
 from rest_framework import serializers
 from custom_auth.models import Mador, User
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserForMadorSerializer(serializers.ModelSerializer):
     forum_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -19,6 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class MadorSerializer(serializers.ModelSerializer):
+    users = UserForMadorSerializer(many=True)
+
     class Meta:
         model = Mador
         fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day']
@@ -33,4 +35,3 @@ class MadorSerializer(serializers.ModelSerializer):
         instance.forum_day = validated_data.get('forum_day', instance.users)
         instance.save()
         return instance
-
