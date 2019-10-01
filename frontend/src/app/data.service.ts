@@ -3,6 +3,7 @@ import {User} from './user';
 import {BehaviorSubject} from 'rxjs';
 import {Forum} from './forum';
 import {Restangular} from 'ngx-restangular';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,11 @@ import {Restangular} from 'ngx-restangular';
 export class DataService {
   private baseUrl = '';
   private dataStore: { users: User[], currentUser: User } = {users: [], currentUser: null};
-  private restangular = null;
 
   constructor(private restangular: Restangular) {
-    this.restangular = restangular;
+    restangular.all('users').login().get().subscribe((token) => {
+      restangular.provider.setDefaultHeaders({Authorization: 'Token ' + token});
+    });
   }
 
   getUsers(user: User) {
