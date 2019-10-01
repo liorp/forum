@@ -20,14 +20,14 @@ import { RestangularModule, Restangular } from 'ngx-restangular';
 
 // Function for setting the default restangular configuration
 export function RestangularConfigFactory(RestangularProvider) {
-  RestangularProvider.setBaseUrl('https://localhost:1337/');
-  RestangularProvider.addElementTransformer('user', true, (user) => {
+  RestangularProvider.setBaseUrl('http://localhost:8000/');
+  RestangularProvider.addElementTransformer('auth', true, (auth) => {
     // This will add a method called login that will do a POST to the path login
     // signature is (name, operation, path, params, headers, elementToPost)
 
-    user.addRestangularMethod('login', 'post', 'login');
+    auth.addRestangularMethod('login', 'post', 'token/login');
 
-    return user;
+    return auth;
   });
   // RestangularProvider.setDefaultHeaders({Authorization: 'Bearer UDXPx-Xko0w4BRKajozCVy20X11MRZs1'});
 }
