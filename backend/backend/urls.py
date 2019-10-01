@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 from rest_framework import routers
+
+from custom_auth.auth import login_user
 from custom_auth.views import UserViewSet, MadorViewSet
 from forum.views import ForumViewSet
 
@@ -28,7 +30,6 @@ router.register(r'forum', ForumViewSet)
 # Wire up our API using automatic URL routing.
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('djoser.urls')),
-    path('auth/', include('djoser.urls.authtoken')),
+    path('auth/login/', login_user),
     path('', include(router.urls)),
 ]

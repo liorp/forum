@@ -3,9 +3,15 @@
     Description: NTLM auth, based on https://djangosnippets.org/snippets/501/
     Date: 30/09/2019
 """
-from django.contrib.auth.models import User
-from django.conf import settings
+import base64
+import struct
 import ldap
+
+from custom_auth.models import User
+from django.conf import settings
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.models import Token
 
 
 class ActiveDirectoryBackend:
@@ -65,3 +71,68 @@ class ActiveDirectoryBackend:
             return True
         except ldap.LDAPError:
             return False
+
+
+def get_msg_str(msg, start):
+    msg_len, _, msg_off = struct.unpack("<HHH", msg[start:start + 6])
+    return msg[msg_off:msg_off + msg_len].replace("\0", '')
+
+
+def ntlm_auth(request):
+    """Goes through ntlm stages...
+    Return user_name, response.
+    While response is not none, keep sending it.
+    Then use the user.
+    """
+    username = None
+    response = None
+
+    auth = request.META.get('HTTP_AUTHORIZATION')
+    if not auth:
+        response = HttpResponse(status=401)
+        response['WWW-Authenticate'] = "NTLM"
+    elif auth[:4] == "NTLM":
+        msg = base64.b64decode(auth[4:])
+        #  print repr(msg)
+        ntlm_fmt = "<8sb" #string, length 8, 4 - op
+        NLTM_SIG = "NTLMSSP\0"
+        signature, op = struct.unpack(ntlm_fmt, msg[:9])
+        if signature != NLTM_SIG:
+            print("error header not recognized")
+        else:
+            print("recognized")
+            # print signature, op
+            # print repr(msg)
+            if op == 1:
+                out_msg_fmt = ntlm_fmt + "2I4B2Q2H"
+                out_msg = struct.pack(out_msg_fmt,
+                    NLTM_SIG, #Signature
+                    2, #Op
+                    0, #target name len
+                    0, #target len off
+                    1, 2, 0x81, 1, #flags
+                    0, #challenge
+                    0, #context
+                    0, #target info len
+                    0x30, #target info offset
+                )
+
+                response = HttpResponse(status=401)
+                response['WWW-Authenticate'] = "NTLM " + base64.b64encode(out_msg).strip()
+            elif op == 3:
+                username = get_msg_str(msg, 36)
+
+    return username, response
+
+
+@csrf_exempt
+def login_user(request):
+    # return ntlm_auth(request)[1]
+    user = User.objects.all()[0]
+    token = Token.objects.get_or_create(user=user)[0]
+    return JsonResponse({
+        "user": user.username,
+        "token": token.key,
+        "is_admin_of_mador": user.is_admin_of_mador,
+        "mador": user.mador
+    })

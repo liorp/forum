@@ -2,3 +2,4 @@
 *.scssc
 *.map
 /forum_venv/
+backend/backend/__pycache__
