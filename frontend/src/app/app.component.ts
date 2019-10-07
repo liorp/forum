@@ -17,6 +17,7 @@ export class AppComponent {
   userChipCtrl = new FormControl();
   currentUser = null;
   currentMador = null;
+  dateToCalculate = null;
   apiService = null;
   dataService = null;
   title = 'forums';
@@ -55,23 +56,37 @@ export class AppComponent {
     this.dataService.login().subscribe((currentUser) => {
       this.currentUser = currentUser;
       this.currentMador = this.currentUser.mador;
-      this.dataService.getForums(this.currentUser).subscribe((forums) => {
-        for (const forum of forums) {
-          this.forums.push(forum);
-        }
-        this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
-      });
-      this.dataService.getUsers(this.currentUser).subscribe((users) => {
-        for (const user of users) {
-          this.users.push(user);
-        }
-        this.usersDataSource = new MatTableDataSource<User>(this.users);
-      });
+      this.getForums();
+      this.getUsers();
+    });
+  }
+
+  getForums() {
+    this.dataService.getForums().subscribe((forums) => {
+      for (const forum of forums) {
+        this.forums.push(forum);
+      }
+      this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
+    });
+  }
+
+  getUsers() {
+    this.dataService.getUsers().subscribe((users) => {
+      for (const user of users) {
+        this.users.push(user);
+      }
+      this.usersDataSource = new MatTableDataSource<User>(this.users);
     });
   }
 
   addForums() {
-    return;
+    this.dataService.calculateForums(
+      this.dateToCalculate.getMonth(),
+      this.dateToCalculate.getYear(),
+      this.currentMador.id
+    ).subscribe(() => {
+      this.getForums();
+    });
   }
 
   removeUserFromForum(user, forum) {

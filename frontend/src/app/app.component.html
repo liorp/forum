@@ -18,12 +18,16 @@
           </mat-form-field>
           <mat-form-field>
             <mat-label>Number of organizers</mat-label>
-            <input matInput [disabled]="!currentUser.is_admin_of_mador" name="numberOfOrganizers"
+            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="numberOfOrganizers"
                    [(ngModel)]="currentMador.number_of_organizers">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Frequency (in weeks)</mat-label>
-            <input matInput [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency" [(ngModel)]="currentMador.forum_frequency">
+            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency" [(ngModel)]="currentMador.forum_frequency">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Month</mat-label>
+            <input matInput type="month" [disabled]="!currentUser.is_admin_of_mador" name="forumMonth" [(ngModel)]="dateToCalculate">
           </mat-form-field>
           <mat-form-field class="forum-users-chip-list">
             <mat-label>Mador's forum admin</mat-label>
