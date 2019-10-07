@@ -32,11 +32,16 @@ export class DataService {
   }
 
   updateForum(forum: Forum) {
-    return this.restangular.one('forum', forum.id).post(forum);
+    return this.restangular.one('forum', forum.id).customPATCH(forum);
   }
 
   updateMador(mador: Mador) {
-    return this.restangular.one('mador', mador.id).post(mador);
+    return this.restangular.one('mador', mador.id).customPATCH(
+      this.pick(
+        mador,
+        ['forum_day', 'forum_frequency', 'name', 'number_of_organizers']
+      )
+    );
   }
 
   calculateForums(month: number, year: number, mador: number) {
@@ -47,5 +52,14 @@ export class DataService {
         mador
       }
     );
+  }
+
+  pick(object, keys) {
+    return keys.reduce((obj, key) => {
+      if (object && object.hasOwnProperty(key)) {
+        obj[key] = object[key];
+      }
+      return obj;
+    }, {});
   }
 }

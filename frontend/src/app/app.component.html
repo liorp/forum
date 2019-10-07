@@ -6,11 +6,14 @@
         <mat-card-title class="main-title">
           Forums
         </mat-card-title>
+        <mat-card-subtitle *ngIf="currentUser.is_admin_of_mador"><a mat-button href="/admin">Admin page</a></mat-card-subtitle>
         <br>
         <form #ForumsForm="ngForm">
           <mat-form-field>
             <mat-label>Day of forum</mat-label>
-            <mat-select [disabled]="!currentUser.is_admin_of_mador" name="dayOfForum" [(ngModel)]="currentMador.forum_day">
+            <mat-select [disabled]="!currentUser.is_admin_of_mador" name="dayOfForum"
+                        [(ngModel)]="currentMador.forum_day"
+                        (ngModelChange)="updateMador($event)">
               <mat-option *ngFor="let day of days" [value]="day.value">
                 {{day.name}}
               </mat-option>
@@ -19,15 +22,17 @@
           <mat-form-field>
             <mat-label>Number of organizers</mat-label>
             <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="numberOfOrganizers"
-                   [(ngModel)]="currentMador.number_of_organizers">
+                   [(ngModel)]="currentMador.number_of_organizers" (ngModelChange)="updateMador($event)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Frequency (in weeks)</mat-label>
-            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency" [(ngModel)]="currentMador.forum_frequency">
+            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency"
+                   [(ngModel)]="currentMador.forum_frequency" (ngModelChange)="updateMador($event)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Month</mat-label>
-            <input matInput type="month" [disabled]="!currentUser.is_admin_of_mador" name="forumMonth" [(ngModel)]="dateToCalculate">
+            <input matInput type="month" [disabled]="!currentUser.is_admin_of_mador" name="forumMonth"
+                   [(ngModel)]="dateToCalculate">
           </mat-form-field>
           <mat-form-field class="forum-users-chip-list">
             <mat-label>Mador's forum admin</mat-label>
@@ -92,7 +97,9 @@
             <td mat-cell *matCellDef="let forum">
               <mat-form-field>
                 <input matInput type="date" [disabled]="!currentUser.is_admin_of_mador"
-                       value="{{forum.date | date:'yyyy-MM-dd'}}">
+                       value="{{forum.date | date:'yyyy-MM-dd'}}"
+                       [(ngModel)]="forum.date"
+                       (ngModelChange)="updateForum($event)">
               </mat-form-field>
             </td>
           </ng-container>
@@ -102,7 +109,9 @@
             <th mat-header-cell *matHeaderCellDef> Notes</th>
             <td mat-cell *matCellDef="let forum">
               <mat-form-field>
-                <input matInput [disabled]="!currentUser.is_admin_of_mador" value="{{forum.notes}}">
+                <input matInput [disabled]="!currentUser.is_admin_of_mador"
+                       [(ngModel)]="forum.notes"
+                       (ngModelChange)="updateForum($event)">
               </mat-form-field>
             </td>
           </ng-container>

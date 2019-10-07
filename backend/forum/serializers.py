@@ -4,10 +4,14 @@
     Date: 13/09/2019
 """
 from rest_framework import serializers
+
+from custom_auth.user_serializers import UserSerializer
 from forum.models import Forum
 
 
 class ForumSerializer(serializers.ModelSerializer):
+    users = UserSerializer(many=True)
+
     class Meta:
         model = Forum
         fields = ['id', 'date', 'notes', 'users']

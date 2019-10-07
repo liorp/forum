@@ -4,6 +4,8 @@
     Date: 01/10/2019
 """
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
+
 from custom_auth.models import Mador, User
 
 
@@ -31,9 +33,15 @@ class MadorSerializer(serializers.ModelSerializer):
         return Mador.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.date)
-        instance.users = validated_data.get('users', instance.date)
-        instance.forum_frequency = validated_data.get('forum_frequency', instance.notes)
-        instance.forum_day = validated_data.get('forum_day', instance.users)
+        instance.name = validated_data.get('name', instance.name)
+        instance.forum_frequency = int(validated_data.get('forum_frequency', instance.forum_frequency))
+        if instance.forum_frequency < 1:
+            raise ValidationError("Forum frequency must be larger than 1!")
+        instance.forum_day = validated_data.get('forum_day', instance.forum_day)
+        if instance.forum_day < 0 or instance.forum_day > 6:
+            raise ValidationError("Forum day must be a weekday!")
+        instance.number_of_organizers = validated_data.get('number_of_organizers', instance.number_of_organizers)
+        if instance.number_of_organizers < 1:
+            raise ValidationError("Forum organizers must exist!")
         instance.save()
         return instance
