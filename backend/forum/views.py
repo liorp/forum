@@ -3,11 +3,10 @@
     Description: Views for the forum app
     Date: 13/09/2019
 """
-from datetime import datetime, timedelta
+from datetime import date, timedelta
 
 from django.db.models import Count
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from custom_auth.models import Mador, User
@@ -23,18 +22,20 @@ class ForumViewSet(viewsets.ModelViewSet):
     serializer_class = ForumSerializer
 
     def create(self, request, *args, **kwargs):
-        month = request.query_params['month']
-        year = request.query_params['year']
-        mador = Mador.objects.get(id=request.query_params['mador'])
+        month = int(request.data['month'])
+        year = int(request.data['year'])
+        mador = Mador.objects.get(id=int(request.data['mador']))
+        if request.user.administered_forum != mador:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         try:
             forums_created = self.create_forums(mador, month, year)
             return Response(data={'forums': [ForumSerializer(forum).data for forum in forums_created]},
                             status=status.HTTP_201_CREATED)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response(data=str(e), status=status.HTTP_400_BAD_REQUEST)
 
     def create_forums(self, mador, month, year):
-        first_day_of_month = datetime(day=1, month=month, year=year)
+        first_day_of_month = date(day=1, month=month, year=year)
         current_day = first_day_of_month
         forum_days = self._get_forum_days(current_day, mador, month)
         return self._create_forum(forum_days, mador)
@@ -45,7 +46,10 @@ class ForumViewSet(viewsets.ModelViewSet):
         for day in forum_days:
             users = User.objects.all().annotate(forum_count=Count('forums')).order_by('forum_count')
             forum_users = users[:mador.number_of_organizers]
-            forums += Forum.objects.create(users=forum_users, date=day)
+            forum = Forum.objects.create(date=day)
+            forum.users.set(forum_users)
+            forum.save()
+            forums.append(forum)
         return forums
 
     @staticmethod
@@ -54,7 +58,7 @@ class ForumViewSet(viewsets.ModelViewSet):
         days_increment = 1
         while current_day.month == month:
             if current_day.weekday() == mador.forum_day:
-                forum_days += current_day
+                forum_days.append(current_day)
                 if days_increment == 1:
                     # Speed up the search for forum days
                     days_increment = mador.forum_frequency * 7

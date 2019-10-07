@@ -17,7 +17,7 @@ export class AppComponent {
   userChipCtrl = new FormControl();
   currentUser = null;
   currentMador = null;
-  dateToCalculate = null;
+  dateToCalculate = new Date().toISOString().slice(0, 7);
   apiService = null;
   dataService = null;
   title = 'forums';
@@ -80,12 +80,14 @@ export class AppComponent {
   }
 
   addForums() {
+    // Dates in JS are not the top of their class
     this.dataService.calculateForums(
-      this.dateToCalculate.getMonth(),
-      this.dateToCalculate.getYear(),
+      this.dateToCalculate.slice(5, 7),
+      this.dateToCalculate.slice(0, 4),
       this.currentMador.id
     ).subscribe(() => {
       this.getForums();
+      this.getUsers();
     });
   }
 
