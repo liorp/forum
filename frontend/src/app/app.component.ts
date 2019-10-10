@@ -49,7 +49,10 @@ export class AppComponent implements OnInit {
 
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
-  @ViewChild('sortUsers', {static: false}) sortUsers: MatSort;
+
+  @ViewChild(MatSort, {static: false}) set content(sort: MatSort) {
+    this.usersDataSource.sort = sort;
+  }
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
@@ -89,7 +92,6 @@ export class AppComponent implements OnInit {
         this.users.push(user);
       }
       this.usersDataSource = new MatTableDataSource<User>(this.users);
-      this.usersDataSource.sort = this.sortUsers;
       this.snackBar.open('Fetched users', null, {
         duration: 700,
       });
