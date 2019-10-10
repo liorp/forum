@@ -6,14 +6,14 @@ import {Forum} from './forum';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {FormControl} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Sort} from '@angular/material/sort';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   userChipCtrl = new FormControl();
   currentUser = null;
@@ -49,10 +49,14 @@ export class AppComponent {
 
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
+  @ViewChild('sortUsers', {static: false}) sortUsers: MatSort;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
     this.snackBar = snackBar;
+  }
+
+  ngOnInit() {
     this.dataService.login().subscribe((currentUser) => {
       this.currentUser = currentUser;
       this.currentMador = this.currentUser.mador;
@@ -85,6 +89,7 @@ export class AppComponent {
         this.users.push(user);
       }
       this.usersDataSource = new MatTableDataSource<User>(this.users);
+      this.usersDataSource.sort = this.sortUsers;
       this.snackBar.open('Fetched users', null, {
         duration: 700,
       });
@@ -149,28 +154,4 @@ export class AppComponent {
   addUserToForum($event, forum) {
     return;
   }
-
-  sortUserData(sort: Sort) {
-    const data = this.users;
-    if (!sort.active || sort.direction === '') {
-      this.users = data;
-      return;
-    }
-
-    this.users = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'username':
-          return compare(a.username, b.username, isAsc);
-        case 'forumCount':
-          return compare(a.forum_count, b.forum_count, isAsc);
-        default:
-          return 0;
-      }
-    });
-  }
-}
-
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

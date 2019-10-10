@@ -36,6 +36,9 @@ class User(AbstractUser):
     mador = models.ForeignKey(Mador, models.deletion.SET_NULL, related_name='users', null=True)
     name = models.CharField(max_length=180, null=True)
 
+    class Meta:
+        ordering = ["username"]
+
     @property
     def is_admin_of_mador(self):
         return hasattr(self, 'administered_forum')

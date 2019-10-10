@@ -5,7 +5,8 @@
         <mat-card-title class="main-title">
           Forums 🥇🥈🥉 <img mat-card-avatar src="../assets/Roman_forum_cropped.jpg">
         </mat-card-title>
-        <mat-card-subtitle *ngIf="currentUser.is_admin_of_mador"><a mat-button href="/admin">Admin page</a></mat-card-subtitle>
+        <mat-card-subtitle *ngIf="currentUser.is_admin_of_mador"><a mat-button href="/admin">Admin page</a>
+        </mat-card-subtitle>
         <br>
         <form #ForumsForm="ngForm">
           <mat-form-field>
@@ -120,7 +121,8 @@
         </table>
 
         Users:
-        <table mat-table matSort [dataSource]="usersDataSource" (matSortChange)="sortUserData($event)">
+        <table mat-table matSort [dataSource]="usersDataSource" matSortActive="username"
+               matSortDirection="asc" #sortUsers>
 
           <!-- Username Column -->
           <ng-container matColumnDef="username">
