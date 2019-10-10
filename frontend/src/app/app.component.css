@@ -24,8 +24,16 @@
           flex-direction: column; }
         .main-container .main-sidenav-content .main-card .main-content table {
           width: 75%; }
-          .main-container .main-sidenav-content .main-card .main-content table th.mat-header-cell {
-            text-align: center; }
+          .main-container .main-sidenav-content .main-card .main-content table .mat-row, .main-container .main-sidenav-content .main-card .main-content table .mat-header-row, .main-container .main-sidenav-content .main-card .main-content table .mat-footer-row {
+            padding-left: 24px;
+            padding-right: 24px; }
+          .main-container .main-sidenav-content .main-card .main-content table .mat-cell:first-child, .main-container .main-sidenav-content .main-card .main-content table .mat-footer-cell:first-child, .main-container .main-sidenav-content .main-card .main-content table .mat-header-cell:first-child {
+            padding-left: 0; }
+          .main-container .main-sidenav-content .main-card .main-content table .mat-cell:last-child, .main-container .main-sidenav-content .main-card .main-content table .mat-footer-cell:last-child, .main-container .main-sidenav-content .main-card .main-content table .mat-header-cell:last-child {
+            padding-right: 0; }
+          .main-container .main-sidenav-content .main-card .main-content table .mat-sort-header-container {
+            display: flex;
+            justify-content: center; }
           .main-container .main-sidenav-content .main-card .main-content table tr td {
             white-space: nowrap; }
         .main-container .main-sidenav-content .main-card .main-content .main-title {

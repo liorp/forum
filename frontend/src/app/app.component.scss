@@ -32,12 +32,25 @@
 
         table {
           width: 75%;
-          .forum-users-chip-list {
 
+          .mat-row, .mat-header-row, .mat-footer-row {
+            padding-left: 24px;
+            padding-right: 24px;
           }
-          th.mat-header-cell {
-            text-align: center;
+
+          .mat-cell:first-child, .mat-footer-cell:first-child, .mat-header-cell:first-child {
+            padding-left: 0;
           }
+
+          .mat-cell:last-child, .mat-footer-cell:last-child, .mat-header-cell:last-child {
+            padding-right: 0;
+          }
+
+          .mat-sort-header-container {
+            display: flex;
+            justify-content: center;
+          }
+
           tr td {
             white-space: nowrap;
           }

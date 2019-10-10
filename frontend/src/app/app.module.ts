@@ -18,6 +18,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {RestangularModule, Restangular} from 'ngx-restangular';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatSortModule} from '@angular/material/sort';
 
 // Function for setting the default restangular configuration
 export function RestangularConfigFactory(RestangularProvider) {
@@ -61,6 +62,7 @@ export function RestangularConfigFactory(RestangularProvider) {
     MatAutocompleteModule,
     MatSnackBarModule,
     RestangularModule.forRoot(RestangularConfigFactory),
+    MatSortModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
