@@ -22,6 +22,6 @@ class ForumSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.date = validated_data.get('date', instance.date)
         instance.notes = validated_data.get('notes', instance.notes)
-        instance.users = validated_data.get('users', instance.users)
+        instance.users.set(validated_data.get('users', instance.users.all()))
         instance.save()
         return instance

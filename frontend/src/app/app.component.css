@@ -9,8 +9,9 @@
     display: flex;
     justify-items: center; }
     .main-container .main-sidenav-content .main-card {
+      height: fit-content;
       width: 50%;
-      margin: auto;
+      margin: 24px auto 24px auto;
       text-align: center; }
       .main-container .main-sidenav-content .main-card .main-content {
         display: flex;

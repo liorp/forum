@@ -32,7 +32,16 @@ export class DataService {
   }
 
   updateForum(forum: Forum) {
-    return this.restangular.one('forum', forum.id).customPATCH(forum);
+    return this.restangular.one('forum', forum.id).customPATCH((
+      this.pick(
+        forum,
+        ['date', 'notes']
+      )
+    ));
+  }
+
+  removeForum(forum: Forum) {
+    return this.restangular.one('forum', forum.id).remove();
   }
 
   updateMador(mador: Mador) {

@@ -19,6 +19,9 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {RestangularModule, Restangular} from 'ngx-restangular';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatSortModule} from '@angular/material/sort';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 // Function for setting the default restangular configuration
 export function RestangularConfigFactory(RestangularProvider) {
@@ -31,7 +34,7 @@ export function RestangularConfigFactory(RestangularProvider) {
     return auth;
   });
   RestangularProvider.addResponseInterceptor((data, operation, what, url, response) => {
-    if (data.results) {
+    if (data && data.results) {
       return data.results;
     } else {
       return data;
@@ -63,6 +66,9 @@ export function RestangularConfigFactory(RestangularProvider) {
     MatSnackBarModule,
     RestangularModule.forRoot(RestangularConfigFactory),
     MatSortModule,
+    MatDividerModule,
+    MatTooltipModule,
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

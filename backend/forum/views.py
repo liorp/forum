@@ -57,7 +57,8 @@ class ForumViewSet(viewsets.ModelViewSet):
         forum_days = []
         days_increment = 1
         while current_day.month == month:
-            if current_day.weekday() == mador.forum_day:
+            real_current_weekday = current_day.weekday() + 1
+            if real_current_weekday == mador.forum_day:
                 forum_days.append(current_day)
                 if days_increment == 1:
                     # Speed up the search for forum days

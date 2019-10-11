@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   ];
   forums = [];
   users: User[] = [];
-  forumsTableColumnsToDisplay = ['date', 'users', 'notes'];
+  forumsTableColumnsToDisplay = ['date', 'users', 'notes', 'remove'];
   usersTableColumnsToDisplay = ['username', 'forumCount'];
   forumsDataSource: MatTableDataSource<Forum>;
   usersDataSource: MatTableDataSource<User>;
@@ -50,8 +50,10 @@ export class AppComponent implements OnInit {
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
 
-  @ViewChild(MatSort, {static: false}) set content(sort: MatSort) {
-    this.usersDataSource.sort = sort;
+  @ViewChild(MatSort, {static: false}) set sortUsers(sort: MatSort) {
+    if (this.usersDataSource) {
+      this.usersDataSource.sort = sort;
+    }
   }
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
@@ -121,8 +123,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  updateMador(ev) {
-    this.dataService.updateMador(this.currentMador).subscribe(() => {
+  updateMador(ev, mador) {
+    this.dataService.updateMador(mador).subscribe(() => {
       this.getForums();
       this.getUsers();
       this.snackBar.open('Updated mador', null, {
@@ -135,8 +137,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  updateForum(ev) {
-    this.dataService.updateForum(ev).subscribe(() => {
+  updateForum(ev, forum) {
+    this.dataService.updateForum(forum).subscribe(() => {
       this.getForums();
       this.getUsers();
       this.snackBar.open('Updated forum', null, {
@@ -149,11 +151,48 @@ export class AppComponent implements OnInit {
     });
   }
 
+  removeForum(ev, forum) {
+    this.dataService.removeForum(forum).subscribe(() => {
+      this.getForums();
+      this.getUsers();
+      this.snackBar.open('Removed forum', null, {
+        duration: 700,
+      });
+    }, (err) => {
+      this.snackBar.open('Error on remove forum', null, {
+        duration: 700,
+      });
+    });
+  }
+
   removeUserFromForum(user, forum) {
     return;
   }
 
   addUserToForum($event, forum) {
     return;
+  }
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  debounce(func, wait, immediate) {
+    let timeout;
+    return (...args) => {
+      const context = this;
+      const later = () => {
+        timeout = null;
+        if (!immediate) {
+          func.apply(context, args);
+        }
+      };
+      const callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) {
+        func.apply(context, args);
+      }
+    };
   }
 }

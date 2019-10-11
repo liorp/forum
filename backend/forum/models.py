@@ -11,7 +11,7 @@ class Forum(models.Model):
     date = models.DateField()
     notes = models.TextField(null=True)
     users = models.ManyToManyField(User, related_name='forums')
-    mador = models.OneToOneField(Mador, models.deletion.SET_NULL, related_name='forums', null=True)
+    mador = models.OneToOneField(Mador, on_delete=models.deletion.SET_NULL, related_name='forums', null=True)
 
     class Meta:
         ordering = ['-date']

@@ -129,7 +129,7 @@ def ntlm_auth(request):
 @csrf_exempt
 def login_user(request):
     # return ntlm_auth(request)[1]
-    user = User.objects.all()[0]
+    user = User.objects.filter(administered_forum__isnull=False)[0]
     token = Token.objects.get_or_create(user=user)[0]
     return JsonResponse({
         "user": user.username,
