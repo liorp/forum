@@ -16,3 +16,4 @@ class Forum(models.Model):
 
     class Meta:
         ordering = ['-date']
+        get_latest_by = '-date'

@@ -1,8 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~@angular/material/theming';
+
 @include mat-core();
 @import 'dark-theme';
 .dark-theme {
   @include angular-material-theme($dark-theme);
 }
+
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+
+table, form {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+table {
+  width: 75%;
+
+  .mat-row, .mat-header-row, .mat-footer-row {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .mat-cell:first-child, .mat-footer-cell:first-child, .mat-header-cell:first-child {
+    padding-left: 0;
+  }
+
+  .mat-cell:last-child, .mat-footer-cell:last-child, .mat-header-cell:last-child {
+    padding-right: 0;
+  }
+
+  .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  tr td {
+    white-space: nowrap;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

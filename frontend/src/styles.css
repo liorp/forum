@@ -4,11 +4,11 @@ Error: File to import not found or unreadable: ~@angular/material/theming.
 
 1: /* You can add global styles to this file, and also import other style files *\/
 2: @import '~@angular/material/theming';
-3: @include mat-core();
-4: @import 'dark-theme';
-5: .dark-theme {
-6:   @include angular-material-theme($dark-theme);
-7: }
+3: 
+4: @include mat-core();
+5: @import 'dark-theme';
+6: .dark-theme {
+7:   @include angular-material-theme($dark-theme);
 
 Backtrace:
 styles.scss:2
@@ -49,4 +49,4 @@ styles.scss:2
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Error: File to import not found or unreadable: ~@angular/material/theming.\A         on line 2 of styles.scss\A \A 1: /* You can add global styles to this file, and also import other style files */\A 2: @import '~@angular/material/theming';\A 3: @include mat-core();\A 4: @import 'dark-theme';\A 5: .dark-theme {\A 6:   @include angular-material-theme($dark-theme);\A 7: }"; }
+  content: "Error: File to import not found or unreadable: ~@angular/material/theming.\A         on line 2 of styles.scss\A \A 1: /* You can add global styles to this file, and also import other style files */\A 2: @import '~@angular/material/theming';\A 3: \A 4: @include mat-core();\A 5: @import 'dark-theme';\A 6: .dark-theme {\A 7:   @include angular-material-theme($dark-theme);"; }

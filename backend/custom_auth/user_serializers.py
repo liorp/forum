@@ -15,18 +15,21 @@ class ForumForUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Forum
-        fields = ['id', 'date', 'notes', 'users']
+        fields = ['id', 'date', 'notes', 'users', 'budget']
 
 
 class UserSerializer(serializers.ModelSerializer):
     forum_count = serializers.SerializerMethodField(read_only=True)
+    latest_forum = serializers.SerializerMethodField()
     forums = ForumForUserSerializer(many=True)
     mador = MadorSerializer()
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'forum_count', 'forums', 'mador']
+        fields = ['id', 'username', 'name', 'forum_count', 'forums', 'mador', 'is_admin_of_mador', 'latest_forum']
 
     def get_forum_count(self, user):
         return user.forums.count()
 
+    def get_latest_forum(self, user):
+        return ForumForUserSerializer(user.forums.latest()).data

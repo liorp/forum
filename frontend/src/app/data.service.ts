@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Restangular} from 'ngx-restangular';
 import {Forum} from './forum';
 import {Mador} from './mador';
+import {User} from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +17,19 @@ export class DataService {
 
   login() {
     const login = this.restangular.all('auth').login();
-    login.subscribe((user) => {
-      this.currentUser = user;
-      this.restangular.provider.setDefaultHeaders({Authorization: 'Token ' + user.token});
+    login.subscribe((response) => {
+      this.currentUser = response.user;
+      this.restangular.provider.setDefaultHeaders({Authorization: 'Token ' + response.token});
     });
     return login;
+  }
+
+  getCurrentUser() {
+    if (this.currentUser) {
+      return new Observable<User>(this.currentUser);
+    } else {
+      return this.login();
+    }
   }
 
   getUsers() {

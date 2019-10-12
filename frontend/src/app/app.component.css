@@ -17,26 +17,6 @@
         display: flex;
         flex-direction: column;
         align-items: center; }
-        .main-container .main-sidenav-content .main-card .main-content table, .main-container .main-sidenav-content .main-card .main-content form {
-          margin-top: 8px;
-          margin-bottom: 8px; }
-        .main-container .main-sidenav-content .main-card .main-content form {
-          display: flex;
-          flex-direction: column; }
-        .main-container .main-sidenav-content .main-card .main-content table {
-          width: 75%; }
-          .main-container .main-sidenav-content .main-card .main-content table .mat-row, .main-container .main-sidenav-content .main-card .main-content table .mat-header-row, .main-container .main-sidenav-content .main-card .main-content table .mat-footer-row {
-            padding-left: 24px;
-            padding-right: 24px; }
-          .main-container .main-sidenav-content .main-card .main-content table .mat-cell:first-child, .main-container .main-sidenav-content .main-card .main-content table .mat-footer-cell:first-child, .main-container .main-sidenav-content .main-card .main-content table .mat-header-cell:first-child {
-            padding-left: 0; }
-          .main-container .main-sidenav-content .main-card .main-content table .mat-cell:last-child, .main-container .main-sidenav-content .main-card .main-content table .mat-footer-cell:last-child, .main-container .main-sidenav-content .main-card .main-content table .mat-header-cell:last-child {
-            padding-right: 0; }
-          .main-container .main-sidenav-content .main-card .main-content table .mat-sort-header-container {
-            display: flex;
-            justify-content: center; }
-          .main-container .main-sidenav-content .main-card .main-content table tr td {
-            white-space: nowrap; }
         .main-container .main-sidenav-content .main-card .main-content .main-title {
           text-align: center; }
 

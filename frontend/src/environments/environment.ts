@@ -2,8 +2,13 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+
 export const environment = {
-  production: false
+  production: false,
+  debounceDelay: 700,
+  toastDelay: 700,
+  separatorKeysCodes: [ENTER, COMMA]
 };
 
 /*

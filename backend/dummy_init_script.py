@@ -10,15 +10,15 @@ from custom_auth.models import User, Mador
 
 def run():
     m = Mador.objects.create(name="Best mador", total_budget=100, default_budget_per_forum=1)
-    u = User.objects.create_user('liorp', password='bar')
+    u = User.objects.create_user('liorp', name='lior', password='bar')
     u.is_superuser = True
     u.is_staff = True
     u.save()
-    u2 = User.objects.create_user('another', password='bar')
+    u2 = User.objects.create_user('another', name='sad', password='bar')
     u2.is_superuser = True
     u2.is_staff = True
     u2.save()
-    u3 = User.objects.create_user('third', password='bar')
+    u3 = User.objects.create_user('third', name='aaaa', password='bar')
     u3.is_superuser = True
     u3.is_staff = True
     u3.save()

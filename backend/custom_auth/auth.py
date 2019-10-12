@@ -14,6 +14,8 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 
+from custom_auth.user_serializers import UserSerializer
+
 
 class ActiveDirectoryBackend:
     def authenticate(self, username=None, password=None):
@@ -132,8 +134,7 @@ def login_user(request):
     user = User.objects.filter(administered_forum__isnull=False)[0]
     token = Token.objects.get_or_create(user=user)[0]
     return JsonResponse({
-        "user": user.username,
+        "user": UserSerializer(user).data,
         "token": token.key,
-        "is_admin_of_mador": user.is_admin_of_mador,
         "mador": MadorSerializer(user.mador).data
     })

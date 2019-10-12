@@ -23,6 +23,10 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCheckboxModule, MatSlideToggleModule} from '@angular/material';
+import { ForumListComponent } from './forum-list/forum-list.component';
+import { UserListComponent } from './user-list/user-list.component';
+import { FirstTimeComponent } from './first-time/first-time.component';
+import { ManageComponent } from './manage/manage.component';
 
 // Function for setting the default restangular configuration
 export function RestangularConfigFactory(RestangularProvider) {
@@ -45,7 +49,11 @@ export function RestangularConfigFactory(RestangularProvider) {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ForumListComponent,
+    UserListComponent,
+    FirstTimeComponent,
+    ManageComponent
   ],
   imports: [
     BrowserModule,
