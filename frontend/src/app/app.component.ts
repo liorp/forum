@@ -125,9 +125,26 @@ export class AppComponent implements OnInit {
     });
   }
 
+  addForum() {
+    // Dates in JS are not the top of their class
+    this.dataService.addForum(
+    ).subscribe(() => {
+      this.getForums();
+      this.getUsers();
+      this.snackBar.open('Added forum', null, {
+        duration: this.toastDelay,
+      });
+    }, (err) => {
+      this.snackBar.open('Error on adding forum', null, {
+        duration: this.toastDelay,
+      });
+    });
+  }
+
   updateMador(ev, mador) {
     // Hacks for writing foreign key to drf
     // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
+    // (https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript)
     const cloneMador = JSON.parse(JSON.stringify(mador));
     delete cloneMador.users;
     cloneMador.users_id = [];
@@ -151,6 +168,7 @@ export class AppComponent implements OnInit {
   updateForum(ev, forum) {
     // Hacks for writing foreign key to drf
     // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
+    // (https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript)
     const cloneForum = JSON.parse(JSON.stringify(forum));
     delete cloneForum.users;
     for (const user of forum.users) {

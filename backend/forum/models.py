@@ -9,9 +9,9 @@ from custom_auth.models import User, Mador
 
 class Forum(models.Model):
     date = models.DateField()
-    notes = models.TextField(null=True)
+    notes = models.TextField(null=True, default='')
     users = models.ManyToManyField(User, related_name='forums')
-    mador = models.OneToOneField(Mador, on_delete=models.deletion.SET_NULL, related_name='forums', null=True)
+    mador = models.ForeignKey(Mador, on_delete=models.deletion.CASCADE, related_name='forums')
     budget = models.IntegerField(default=0)
 
     class Meta:

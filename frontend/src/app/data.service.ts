@@ -27,6 +27,11 @@ export class DataService {
     return this.restangular.all('user').getList();
   }
 
+  addForum() {
+    return this.restangular.all('forum').customPOST(
+    );
+  }
+
   getForums() {
     return this.restangular.all('forum').getList();
   }
@@ -34,16 +39,6 @@ export class DataService {
   updateForum(forum: Forum) {
     return this.restangular.one('forum', forum.id).customPATCH(
       forum
-    );
-  }
-
-  removeForum(forum: Forum) {
-    return this.restangular.one('forum', forum.id).remove();
-  }
-
-  updateMador(mador: Mador) {
-    return this.restangular.one('mador', mador.id).customPATCH(
-      mador
     );
   }
 
@@ -55,6 +50,16 @@ export class DataService {
         mador
       },
       'calculate'
+    );
+  }
+
+  removeForum(forum: Forum) {
+    return this.restangular.one('forum', forum.id).remove();
+  }
+
+  updateMador(mador: Mador) {
+    return this.restangular.one('mador', mador.id).customPATCH(
+      mador
     );
   }
 }

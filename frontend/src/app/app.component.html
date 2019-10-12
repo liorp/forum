@@ -172,6 +172,9 @@
           <tr mat-header-row *matHeaderRowDef="forumsTableColumnsToDisplay"></tr>
           <tr mat-row *matRowDef="let row; columns: forumsTableColumnsToDisplay;"></tr>
         </table>
+        <button type="submit" mat-raised-button (click)="addForum()" [disabled]="!currentUser.is_admin_of_mador">
+          Manually add a forum
+        </button>
         <br>
         <mat-card-title>
           Users

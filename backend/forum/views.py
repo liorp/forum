@@ -22,6 +22,13 @@ class ForumViewSet(viewsets.ModelViewSet):
     queryset = Forum.objects.all()
     serializer_class = ForumSerializer
 
+    def create(self, request, *args, **kwargs):
+        if not request.user.is_admin_of_mador:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        forum = Forum.objects.create(mador=request.user.mador, date=date.today(), budget=0)
+        return Response(data={'forums': [ForumSerializer(forum).data]},
+                        status=status.HTTP_201_CREATED)
+
     @action(detail=False, methods=['post'])
     def calculate(self, request, *args, **kwargs):
         month = int(request.data['month'])
