@@ -12,6 +12,7 @@ class Forum(models.Model):
     notes = models.TextField(null=True)
     users = models.ManyToManyField(User, related_name='forums')
     mador = models.OneToOneField(Mador, on_delete=models.deletion.SET_NULL, related_name='forums', null=True)
+    budget = models.IntegerField(default=0)
 
     class Meta:
         ordering = ['-date']

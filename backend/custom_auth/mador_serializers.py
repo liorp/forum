@@ -27,7 +27,7 @@ class MadorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Mador
-        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admin', 'number_of_organizers']
+        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admin', 'number_of_organizers', 'budget']
 
     def create(self, validated_data):
         return Mador.objects.create(**validated_data)

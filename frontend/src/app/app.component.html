@@ -50,6 +50,11 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
+          <mat-form-field>
+            <mat-label>Current Budget</mat-label>
+            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="budget"
+                   [(ngModel)]="currentMador.budget" (ngModelChange)="updateMador($event, currentMador)">
+          </mat-form-field>
           <br>
           <button type="submit" mat-raised-button (click)="addForums()" [disabled]="!currentUser.is_admin_of_mador">
             Calculate this month's forums!
@@ -94,7 +99,7 @@
 
           <!-- Date Column -->
           <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef> Date</th>
+            <th mat-header-cell *matHeaderCellDef>Date</th>
             <td mat-cell *matCellDef="let forum">
               <mat-form-field>
                 <input matInput type="date" [disabled]="!currentUser.is_admin_of_mador"
@@ -107,11 +112,23 @@
 
           <!-- Notes Column -->
           <ng-container matColumnDef="notes">
-            <th mat-header-cell *matHeaderCellDef> Notes</th>
+            <th mat-header-cell *matHeaderCellDef>Notes</th>
             <td mat-cell *matCellDef="let forum">
               <mat-form-field>
-                <input matInput [disabled]="!currentUser.is_admin_of_mador"
-                       [(ngModel)]="forum.notes"
+                <textarea matInput type="text" [disabled]="!currentUser.is_admin_of_mador"
+                          [(ngModel)]="forum.notes"
+                          (ngModelChange)="debounce(updateForum, 700, false)($event, forum)"></textarea>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <!-- Budget Column -->
+          <ng-container matColumnDef="budget">
+            <th mat-header-cell *matHeaderCellDef>Budget</th>
+            <td mat-cell *matCellDef="let forum">
+              <mat-form-field>
+                <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador"
+                       [(ngModel)]="forum.budget"
                        (ngModelChange)="debounce(updateForum, 700, false)($event, forum)">
               </mat-form-field>
             </td>

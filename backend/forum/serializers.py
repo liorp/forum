@@ -14,7 +14,7 @@ class ForumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Forum
-        fields = ['id', 'date', 'notes', 'users']
+        fields = ['id', 'date', 'notes', 'users', 'budget']
 
     def create(self, validated_data):
         return Forum.objects.create(**validated_data)

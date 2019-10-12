@@ -30,6 +30,7 @@ class Mador(models.Model):
                                  models.deletion.SET_NULL,
                                  related_name='administered_forum',
                                  null=True)
+    budget = models.IntegerField(default=0)
 
 
 class User(AbstractUser):

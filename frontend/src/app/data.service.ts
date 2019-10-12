@@ -48,7 +48,7 @@ export class DataService {
     return this.restangular.one('mador', mador.id).customPATCH(
       this.pick(
         mador,
-        ['forum_day', 'forum_frequency', 'name', 'number_of_organizers']
+        ['forum_day', 'forum_frequency', 'name', 'number_of_organizers', 'budget']
       )
     );
   }
