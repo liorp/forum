@@ -33,10 +33,7 @@ export class DataService {
 
   updateForum(forum: Forum) {
     return this.restangular.one('forum', forum.id).customPATCH((
-      this.pick(
-        forum,
-        ['date', 'notes']
-      )
+      forum
     ));
   }
 
@@ -46,10 +43,7 @@ export class DataService {
 
   updateMador(mador: Mador) {
     return this.restangular.one('mador', mador.id).customPATCH(
-      this.pick(
-        mador,
-        ['forum_day', 'forum_frequency', 'name', 'number_of_organizers', 'budget']
-      )
+      mador
     );
   }
 

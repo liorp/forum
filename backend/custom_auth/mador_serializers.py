@@ -23,11 +23,11 @@ class UserForMadorSerializer(serializers.ModelSerializer):
 class MadorSerializer(serializers.ModelSerializer):
     users = UserForMadorSerializer(many=True)
     admin = UserForMadorSerializer()
-    forum_day = serializers.IntegerField()
 
     class Meta:
         model = Mador
-        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admin', 'number_of_organizers', 'budget']
+        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admin',
+                  'number_of_organizers', 'total_budget', 'default_budget_per_forum', 'auto_track_forum_budget']
 
     def create(self, validated_data):
         return Mador.objects.create(**validated_data)
@@ -43,5 +43,14 @@ class MadorSerializer(serializers.ModelSerializer):
         instance.number_of_organizers = validated_data.get('number_of_organizers', instance.number_of_organizers)
         if instance.number_of_organizers < 1:
             raise ValidationError("Forum organizers must exist!")
+        instance.total_budget = int(validated_data.get('total_budget', instance.total_budget))
+        if instance.total_budget < 0:
+            raise ValidationError("Mador total budget must be larger than 0!")
+        instance.default_budget_per_forum = int(validated_data.get('default_budget_per_forum',
+                                                                   instance.default_budget_per_forum))
+        if instance.default_budget_per_forum < 0:
+            raise ValidationError("Mador default budget per forum must be larger than 0!")
+        instance.auto_track_forum_budget = bool(validated_data.get('auto_track_forum_budget',
+                                                                   instance.auto_track_forum_budget))
         instance.save()
         return instance

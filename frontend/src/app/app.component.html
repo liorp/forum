@@ -51,9 +51,19 @@
             </mat-autocomplete>
           </mat-form-field>
           <mat-form-field>
-            <mat-label>Current Budget</mat-label>
-            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="budget"
-                   [(ngModel)]="currentMador.budget" (ngModelChange)="updateMador($event, currentMador)">
+            <mat-label>Total Budget</mat-label>
+            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="totalBudget"
+                   [(ngModel)]="currentMador.total_budget" (ngModelChange)="updateMador($event, currentMador)">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Default Budget Per Forum</mat-label>
+            <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="defaultBudgetPerForum"
+                   [(ngModel)]="currentMador.default_budget_per_forum" (ngModelChange)="updateMador($event, currentMador)">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Auto Track Forum Budget</mat-label>
+            <input matInput type="checkbox" min="0" [disabled]="!currentUser.is_admin_of_mador" name="autoTrackForumBudget"
+                   [(ngModel)]="currentMador.auto_track_forum_budget" (ngModelChange)="updateMador($event, currentMador)">
           </mat-form-field>
           <br>
           <button type="submit" mat-raised-button (click)="addForums()" [disabled]="!currentUser.is_admin_of_mador">

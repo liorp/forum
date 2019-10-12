@@ -24,13 +24,15 @@ class Mador(models.Model):
     )
     forum_day = models.IntegerField(choices=DAYS, default=THURSDAY)
     name = models.CharField(max_length=50)
-    forum_frequency = models.IntegerField()
-    number_of_organizers = models.IntegerField()
+    forum_frequency = models.IntegerField(default=1)
+    number_of_organizers = models.IntegerField(default=2)
     admin = models.OneToOneField('custom_auth.User',
                                  models.deletion.SET_NULL,
                                  related_name='administered_forum',
                                  null=True)
-    budget = models.IntegerField(default=0)
+    total_budget = models.IntegerField(default=0)
+    default_budget_per_forum = models.IntegerField(default=0)
+    auto_track_forum_budget = models.BooleanField(default=True)
 
 
 class User(AbstractUser):
