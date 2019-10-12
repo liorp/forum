@@ -22,6 +22,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatCheckboxModule, MatSlideToggleModule} from '@angular/material';
 
 // Function for setting the default restangular configuration
 export function RestangularConfigFactory(RestangularProvider) {
@@ -69,6 +70,8 @@ export function RestangularConfigFactory(RestangularProvider) {
     MatDividerModule,
     MatTooltipModule,
     FlexLayoutModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -5,15 +5,24 @@
         <mat-card-title class="main-title">
           Forums 🥇🥈🥉 <img mat-card-avatar src="../assets/Roman_forum_cropped.jpg">
         </mat-card-title>
-        <mat-card-subtitle *ngIf="currentUser.is_admin_of_mador"><a mat-button href="/admin">Admin page</a>
+        <mat-card-subtitle>
+          <div *ngIf="currentUser.is_admin_of_mador">
+            <a mat-button href="/admin">Admin page</a>
+            <br>
+          </div>
+          Welcome {{currentUser.name}} of {{currentMador.name}}
         </mat-card-subtitle>
-        <br>
         <form #ForumsForm="ngForm">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput type="text" [disabled]="!currentUser.is_admin_of_mador" name="madorName"
+                   [(ngModel)]="currentMador.name" (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
+          </mat-form-field>
           <mat-form-field>
             <mat-label>Day of forum</mat-label>
             <mat-select [disabled]="!currentUser.is_admin_of_mador" name="dayOfForum"
                         [(ngModel)]="currentMador.forum_day"
-                        (ngModelChange)="updateMador($event, currentMador)">
+                        (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
               <mat-option *ngFor="let day of days" [value]="day.value">
                 {{day.name}}
               </mat-option>
@@ -22,12 +31,12 @@
           <mat-form-field>
             <mat-label>Number of organizers</mat-label>
             <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="numberOfOrganizers"
-                   [(ngModel)]="currentMador.number_of_organizers" (ngModelChange)="updateMador($event, currentMador)">
+                   [(ngModel)]="currentMador.number_of_organizers" (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Frequency (in weeks)</mat-label>
             <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="forumFrequency"
-                   [(ngModel)]="currentMador.forum_frequency" (ngModelChange)="updateMador($event, currentMador)">
+                   [(ngModel)]="currentMador.forum_frequency" (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Month</mat-label>
@@ -53,17 +62,19 @@
           <mat-form-field>
             <mat-label>Total Budget</mat-label>
             <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="totalBudget"
-                   [(ngModel)]="currentMador.total_budget" (ngModelChange)="updateMador($event, currentMador)">
+                   [(ngModel)]="currentMador.total_budget" (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
           </mat-form-field>
           <mat-form-field>
             <mat-label>Default Budget Per Forum</mat-label>
             <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador" name="defaultBudgetPerForum"
-                   [(ngModel)]="currentMador.default_budget_per_forum" (ngModelChange)="updateMador($event, currentMador)">
+                   [(ngModel)]="currentMador.default_budget_per_forum" (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field floatLabel="always">
             <mat-label>Auto Track Forum Budget</mat-label>
-            <input matInput type="checkbox" min="0" [disabled]="!currentUser.is_admin_of_mador" name="autoTrackForumBudget"
-                   [(ngModel)]="currentMador.auto_track_forum_budget" (ngModelChange)="updateMador($event, currentMador)">
+            <mat-slide-toggle matInput [disabled]="!currentUser.is_admin_of_mador" name="autoTrackForumBudget"
+                   [(ngModel)]="currentMador.auto_track_forum_budget" (ngModelChange)="debounce(updateMador, debounceDelay, false)($event, currentMador)">
+            </mat-slide-toggle>
+            <textarea matInput hidden></textarea>
           </mat-form-field>
           <br>
           <button type="submit" mat-raised-button (click)="addForums()" [disabled]="!currentUser.is_admin_of_mador">
@@ -127,7 +138,7 @@
               <mat-form-field>
                 <textarea matInput type="text" [disabled]="!currentUser.is_admin_of_mador"
                           [(ngModel)]="forum.notes"
-                          (ngModelChange)="debounce(updateForum, 700, false)($event, forum)"></textarea>
+                          (ngModelChange)="debounce(updateForum, debounceDelay, false)($event, forum)"></textarea>
               </mat-form-field>
             </td>
           </ng-container>
@@ -139,7 +150,7 @@
               <mat-form-field>
                 <input matInput type="number" min="0" [disabled]="!currentUser.is_admin_of_mador"
                        [(ngModel)]="forum.budget"
-                       (ngModelChange)="debounce(updateForum, 700, false)($event, forum)">
+                       (ngModelChange)="debounce(updateForum, debounceDelay, false)($event, forum)">
               </mat-form-field>
             </td>
           </ng-container>

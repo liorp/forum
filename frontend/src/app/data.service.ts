@@ -32,9 +32,9 @@ export class DataService {
   }
 
   updateForum(forum: Forum) {
-    return this.restangular.one('forum', forum.id).customPATCH((
+    return this.restangular.one('forum', forum.id).customPATCH(
       forum
-    ));
+    );
   }
 
   removeForum(forum: Forum) {
@@ -55,14 +55,5 @@ export class DataService {
         mador
       }
     );
-  }
-
-  pick(object, keys) {
-    return keys.reduce((obj, key) => {
-      if (object && object.hasOwnProperty(key)) {
-        obj[key] = object[key];
-      }
-      return obj;
-    }, {});
   }
 }

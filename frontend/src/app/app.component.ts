@@ -14,6 +14,8 @@ import {MatSort} from '@angular/material/sort';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  debounceDelay = 700;
+  toastDelay = 700;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   userChipCtrl = new FormControl();
   currentUser = null;
@@ -78,11 +80,11 @@ export class AppComponent implements OnInit {
       }
       this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
       this.snackBar.open('Fetched forums', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on getting forums', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     });
   }
@@ -95,11 +97,11 @@ export class AppComponent implements OnInit {
       }
       this.usersDataSource = new MatTableDataSource<User>(this.users);
       this.snackBar.open('Fetched users', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on get users', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     });
   }
@@ -114,39 +116,55 @@ export class AppComponent implements OnInit {
       this.getForums();
       this.getUsers();
       this.snackBar.open('Calculated forums', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on calculating forums', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     });
   }
 
   updateMador(ev, mador) {
-    this.dataService.updateMador(mador).subscribe(() => {
+    // Hacks for writing foreign key to drf
+    // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
+    const cloneMador = JSON.parse(JSON.stringify(mador));
+    delete cloneMador.users;
+    cloneMador.users_id = [];
+    for (const user of mador.users) {
+      cloneMador.users_id.push(user.id);
+    }
+    cloneMador.admin = cloneMador.admin.id;
+    this.dataService.updateMador(cloneMador).subscribe(() => {
       this.getForums();
       this.getUsers();
       this.snackBar.open('Updated mador', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on updated mador', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     });
   }
 
   updateForum(ev, forum) {
-    this.dataService.updateForum(forum).subscribe(() => {
+    // Hacks for writing foreign key to drf
+    // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
+    const cloneForum = JSON.parse(JSON.stringify(forum));
+    delete cloneForum.users;
+    for (const user of forum.users) {
+      cloneForum.users_id.push(user.id);
+    }
+    this.dataService.updateForum(cloneForum).subscribe(() => {
       this.getForums();
       this.getUsers();
       this.snackBar.open('Updated forum', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on updated forum', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     });
   }
@@ -156,11 +174,11 @@ export class AppComponent implements OnInit {
       this.getForums();
       this.getUsers();
       this.snackBar.open('Removed forum', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on remove forum', null, {
-        duration: 700,
+        duration: this.toastDelay,
       });
     });
   }
@@ -194,5 +212,14 @@ export class AppComponent implements OnInit {
         func.apply(context, args);
       }
     };
+  }
+
+  pick(object, keys) {
+    return keys.reduce((obj, key) => {
+      if (object && object.hasOwnProperty(key)) {
+        obj[key] = object[key];
+      }
+      return obj;
+    }, {});
   }
 }
