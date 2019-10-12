@@ -77,7 +77,7 @@
             <textarea matInput hidden></textarea>
           </mat-form-field>
           <br>
-          <button type="submit" mat-raised-button (click)="addForums()" [disabled]="!currentUser.is_admin_of_mador">
+          <button type="submit" mat-raised-button (click)="calculateForums()" [disabled]="!currentUser.is_admin_of_mador">
             Calculate this month's forums!
           </button>
         </form>

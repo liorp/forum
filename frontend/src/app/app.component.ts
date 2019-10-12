@@ -67,23 +67,48 @@ export class AppComponent implements OnInit {
     this.dataService.login().subscribe((currentUser) => {
       this.currentUser = currentUser;
       this.currentMador = this.currentUser.mador;
-      this.getForums();
-      this.getUsers();
+      this.refreshData();
     });
   }
 
-  getForums() {
-    this.dataService.getForums().subscribe((forums) => {
-      this.forums.splice(0);
-      for (const forum of forums) {
-        this.forums.push(forum);
-      }
-      this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
-      this.snackBar.open('Fetched forums', null, {
+  // Refreshes the current mador, list of users and list of forums
+  refreshData() {
+    this.getForums();
+    this.getUsers();
+    this.getCurrentMador();
+  }
+
+  getCurrentMador() {
+    this.dataService.getMador(this.currentMador).subscribe((mador) => {
+      this.currentMador = mador;
+      this.snackBar.open('Fetched mador', null, {
         duration: this.toastDelay,
       });
     }, (err) => {
-      this.snackBar.open('Error on getting forums', null, {
+      this.snackBar.open('Error on get mador', null, {
+        duration: this.toastDelay,
+      });
+    });
+  }
+
+  updateMador(ev, mador) {
+    // Hacks for writing foreign key to drf
+    // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
+    // (https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript)
+    const cloneMador = JSON.parse(JSON.stringify(mador));
+    delete cloneMador.users;
+    cloneMador.users_id = [];
+    for (const user of mador.users) {
+      cloneMador.users_id.push(user.id);
+    }
+    cloneMador.admin = cloneMador.admin.id;
+    this.dataService.updateMador(cloneMador).subscribe(() => {
+      this.refreshData();
+      this.snackBar.open('Updated mador', null, {
+        duration: this.toastDelay,
+      });
+    }, (err) => {
+      this.snackBar.open('Error on updated mador', null, {
         duration: this.toastDelay,
       });
     });
@@ -106,15 +131,31 @@ export class AppComponent implements OnInit {
     });
   }
 
-  addForums() {
+  getForums() {
+    this.dataService.getForums().subscribe((forums) => {
+      this.forums.splice(0);
+      for (const forum of forums) {
+        this.forums.push(forum);
+      }
+      this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
+      this.snackBar.open('Fetched forums', null, {
+        duration: this.toastDelay,
+      });
+    }, (err) => {
+      this.snackBar.open('Error on getting forums', null, {
+        duration: this.toastDelay,
+      });
+    });
+  }
+
+  calculateForums() {
     // Dates in JS are not the top of their class
     this.dataService.calculateForums(
       parseInt(this.dateToCalculate.slice(5, 7), 10),
       parseInt(this.dateToCalculate.slice(0, 4), 10),
       this.currentMador.id
     ).subscribe(() => {
-      this.getForums();
-      this.getUsers();
+      this.refreshData();
       this.snackBar.open('Calculated forums', null, {
         duration: this.toastDelay,
       });
@@ -129,37 +170,12 @@ export class AppComponent implements OnInit {
     // Dates in JS are not the top of their class
     this.dataService.addForum(
     ).subscribe(() => {
-      this.getForums();
-      this.getUsers();
+      this.refreshData();
       this.snackBar.open('Added forum', null, {
         duration: this.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on adding forum', null, {
-        duration: this.toastDelay,
-      });
-    });
-  }
-
-  updateMador(ev, mador) {
-    // Hacks for writing foreign key to drf
-    // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
-    // (https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript)
-    const cloneMador = JSON.parse(JSON.stringify(mador));
-    delete cloneMador.users;
-    cloneMador.users_id = [];
-    for (const user of mador.users) {
-      cloneMador.users_id.push(user.id);
-    }
-    cloneMador.admin = cloneMador.admin.id;
-    this.dataService.updateMador(cloneMador).subscribe(() => {
-      this.getForums();
-      this.getUsers();
-      this.snackBar.open('Updated mador', null, {
-        duration: this.toastDelay,
-      });
-    }, (err) => {
-      this.snackBar.open('Error on updated mador', null, {
         duration: this.toastDelay,
       });
     });
@@ -171,12 +187,12 @@ export class AppComponent implements OnInit {
     // (https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript)
     const cloneForum = JSON.parse(JSON.stringify(forum));
     delete cloneForum.users;
+    cloneForum.users_id = [];
     for (const user of forum.users) {
       cloneForum.users_id.push(user.id);
     }
     this.dataService.updateForum(cloneForum).subscribe(() => {
-      this.getForums();
-      this.getUsers();
+      this.refreshData();
       this.snackBar.open('Updated forum', null, {
         duration: this.toastDelay,
       });
@@ -189,8 +205,7 @@ export class AppComponent implements OnInit {
 
   removeForum(ev, forum) {
     this.dataService.removeForum(forum).subscribe(() => {
-      this.getForums();
-      this.getUsers();
+      this.refreshData();
       this.snackBar.open('Removed forum', null, {
         duration: this.toastDelay,
       });

@@ -62,4 +62,8 @@ export class DataService {
       mador
     );
   }
+
+  getMador(mador: Mador) {
+    return this.restangular.one('forum', mador.id).get();
+  }
 }

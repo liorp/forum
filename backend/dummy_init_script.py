@@ -9,7 +9,7 @@ from custom_auth.models import User, Mador
 
 
 def run():
-    m = Mador.objects.create()
+    m = Mador.objects.create(name="Best mador", total_budget=100, default_budget_per_forum=1)
     u = User.objects.create_user('liorp', password='bar')
     u.is_superuser = True
     u.is_staff = True

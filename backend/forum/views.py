@@ -55,7 +55,7 @@ class ForumViewSet(viewsets.ModelViewSet):
         for day in forum_days:
             users = User.objects.all().annotate(forum_count=Count('forums')).order_by('forum_count')
             forum_users = users[:mador.number_of_organizers]
-            forum = Forum.objects.create(date=day, budget=mador.default_budget_per_forum)
+            forum = Forum.objects.create(date=day, budget=mador.default_budget_per_forum, mador=mador)
             if mador.auto_track_forum_budget:
                 mador.total_budget -= mador.default_budget_per_forum
                 mador.save()
