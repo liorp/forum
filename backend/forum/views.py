@@ -7,6 +7,7 @@ from datetime import date, timedelta
 
 from django.db.models import Count
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from custom_auth.models import Mador, User
@@ -21,7 +22,8 @@ class ForumViewSet(viewsets.ModelViewSet):
     queryset = Forum.objects.all()
     serializer_class = ForumSerializer
 
-    def create(self, request, *args, **kwargs):
+    @action(detail=False, methods=['post'])
+    def calculate(self, request, *args, **kwargs):
         month = int(request.data['month'])
         year = int(request.data['year'])
         mador = Mador.objects.get(id=int(request.data['mador']))
@@ -46,7 +48,10 @@ class ForumViewSet(viewsets.ModelViewSet):
         for day in forum_days:
             users = User.objects.all().annotate(forum_count=Count('forums')).order_by('forum_count')
             forum_users = users[:mador.number_of_organizers]
-            forum = Forum.objects.create(date=day)
+            forum = Forum.objects.create(date=day, budget=mador.default_budget_per_forum)
+            if mador.auto_track_forum_budget:
+                mador.total_budget -= mador.default_budget_per_forum
+                mador.save()
             forum.users.set(forum_users)
             forum.save()
             forums.append(forum)

@@ -27,7 +27,11 @@ class ForumSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.date = validated_data.get('date', instance.date)
         instance.notes = validated_data.get('notes', instance.notes)
-        instance.notes = validated_data.get('budget', instance.budget)
+        # Calculate the new balance of the mador's budget
+        if instance.mador.auto_track_forum_budget:
+            instance.mador.total_budget -= validated_data.get('budget', instance.budget) - instance.budget
+            instance.mador.save()
+        instance.budget = validated_data.get('budget', instance.budget)
         instance.users.set(validated_data.get('users', instance.users.all()))
         instance.save()
         return instance

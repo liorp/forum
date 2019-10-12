@@ -48,12 +48,13 @@ export class DataService {
   }
 
   calculateForums(month: number, year: number, mador: number) {
-    return this.restangular.all('forum').post(
+    return this.restangular.all('forum').customPOST(
       {
         month,
         year,
         mador
-      }
+      },
+      'calculate'
     );
   }
 }

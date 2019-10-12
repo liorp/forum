@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
   ];
   forums = [];
   users: User[] = [];
-  forumsTableColumnsToDisplay = ['date', 'users', 'notes', 'remove'];
+  forumsTableColumnsToDisplay = ['date', 'users', 'budget', 'notes', 'remove'];
   usersTableColumnsToDisplay = ['username', 'forumCount'];
   forumsDataSource: MatTableDataSource<Forum>;
   usersDataSource: MatTableDataSource<User>;
