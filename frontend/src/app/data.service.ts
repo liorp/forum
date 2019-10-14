@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, of} from 'rxjs';
 import {Restangular} from 'ngx-restangular';
 import {Forum} from './forum';
 import {Mador} from './mador';
@@ -26,9 +26,9 @@ export class DataService {
 
   getCurrentUser() {
     if (this.currentUser) {
-      return new Observable<User>(this.currentUser);
+      return of(this.currentUser);
     } else {
-      return this.login();
+      return this.login().map((response) => response.user);
     }
   }
 

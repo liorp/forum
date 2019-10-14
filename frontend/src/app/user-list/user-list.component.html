@@ -1,0 +1,29 @@
+<mat-card-title>
+  Users
+</mat-card-title>
+<table mat-table matSort [dataSource]="usersDataSource" matSortActive="forumCount"
+       matSortDirection="asc" #sortUsers>
+
+  <!-- Username Column -->
+  <ng-container matColumnDef="username">
+    <th mat-header-cell mat-sort-header="username" *matHeaderCellDef> Username</th>
+    <td mat-cell *matCellDef="let user">
+      {{ user.firstPlace ? '🥇' : user.secondPlace ? '🥈' : user.thirdPlace ? '🥉' : '' }} {{user.username}}
+    </td>
+  </ng-container>
+
+  <!-- Number Of Forums Column -->
+  <ng-container matColumnDef="forumCount">
+    <th mat-header-cell mat-sort-header="forum_count" *matHeaderCellDef> Number of forums</th>
+    <td mat-cell *matCellDef="let user"> {{user.forum_count}} </td>
+  </ng-container>
+
+  <!-- Latest Forum Column -->
+  <ng-container matColumnDef="latestForum">
+    <th mat-header-cell mat-sort-header="latestForumDate" *matHeaderCellDef> Latest Forum</th>
+    <td mat-cell *matCellDef="let user"> {{user.latest_forum.date | date}} </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="usersTableColumnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let row; columns: usersTableColumnsToDisplay;"></tr>
+</table>
