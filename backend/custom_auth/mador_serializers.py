@@ -23,15 +23,15 @@ class UserForMadorSerializer(serializers.ModelSerializer):
 
 class MadorSerializer(serializers.ModelSerializer):
     users = UserForMadorSerializer(many=True, read_only=True)
-    admin = UserForMadorSerializer(read_only=True)
+    admins = UserForMadorSerializer(many=True, read_only=True)
     # Hacks for writing foreign key to drf
     # (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
     users_id = PrimaryKeyRelatedField(many=True, write_only=True, source='users', queryset=User.objects.all())
-    admin_id = PrimaryKeyRelatedField(write_only=True, source='admin', queryset=User.objects.all())
+    admins_id = PrimaryKeyRelatedField(many=True, write_only=True, source='admins', queryset=User.objects.all())
 
     class Meta:
         model = Mador
-        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admin',
+        fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admins',
                   'number_of_organizers', 'total_budget', 'default_budget_per_forum', 'auto_track_forum_budget',
                   'users_id', 'admin_id']
 
@@ -58,5 +58,6 @@ class MadorSerializer(serializers.ModelSerializer):
             raise ValidationError("Mador default budget per forum must be larger than 0!")
         instance.auto_track_forum_budget = bool(validated_data.get('auto_track_forum_budget',
                                                                    instance.auto_track_forum_budget))
+        # TODO: CHECK ABOUT SAVE OF USERS AND ADMINS
         instance.save()
         return instance

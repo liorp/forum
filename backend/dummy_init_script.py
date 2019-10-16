@@ -27,6 +27,20 @@ def run():
     m.users.set([u, u2, u3])
     m.save()
 
+    m1 = Mador.objects.create(name="Another mador", total_budget=10, default_budget_per_forum=1)
+    uu1 = User.objects.create_user('fake', name='fake', password='bar')
+    uu1.is_superuser = True
+    uu1.is_staff = True
+    uu1.save()
+    uu2 = User.objects.create_user('fake1', name='fake1', password='bar')
+    uu2.is_superuser = True
+    uu2.is_staff = True
+    uu2.save()
+    m1.admin = uu1
+    m1.save()
+    m1.users.set([uu1, uu2])
+    m1.save()
+
 
 if __name__ == '__main__':
     run()

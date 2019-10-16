@@ -1,8 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataService} from '../data.service';
-import {MatSnackBar} from '@angular/material';
+import {MatAutocomplete, MatSnackBar} from '@angular/material';
 import { environment } from '../../environments/environment.prod';
 import {Mador} from '../mador';
+import {User} from '../user';
+import {map, startWith} from 'rxjs/operators';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-manage',
@@ -10,6 +13,7 @@ import {Mador} from '../mador';
   styleUrls: ['./manage.component.scss']
 })
 export class ManageComponent implements OnInit, OnDestroy {
+  madorUsersChipCtrl = new FormControl();
   currentUser$ = null;
   dateToCalculate = new Date().toISOString().slice(0, 7);
   dataService: DataService = null;
@@ -35,18 +39,30 @@ export class ManageComponent implements OnInit, OnDestroy {
   environment = environment;
   currentMador$ = null;
   users$ = null;
+  users = null;
   madorToUpdate: Mador = new Mador();
   currentMadorSubscription = null;
+  usersSubscription = null;
+  filteredUsers = null;
+  selectedUser = null;
+  @ViewChild('madorUsersAutocomplete', {static: false}) matAutocompleteUsers: MatAutocomplete;
+  @ViewChild('madorAdminAutocomplete', {static: false}) matAutocompleteAdmin: MatAutocomplete;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
     this.snackBar = snackBar;
+    this.filteredUsers = this.madorUsersChipCtrl.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) => user && typeof user === 'string' ? this._filterUsers(user) : this.users.slice()));
   }
 
   ngOnInit() {
     this.currentUser$ = this.dataService.currentUser;
     this.currentMador$ = this.dataService.currentMador;
     this.users$ = this.dataService.users;
+    this.usersSubscription = this.users$.subscribe((users) => {
+      this.users = users;
+    });
     this.currentMadorSubscription = this.currentMador$.subscribe((currentMador) => {
       if (currentMador) {
         this.madorToUpdate.id = currentMador.id;
@@ -96,5 +112,53 @@ export class ManageComponent implements OnInit, OnDestroy {
         duration: environment.toastDelay,
       });
     });
+  }
+
+  private _filterUsers(value: string): User[] {
+    const filterValue = value.toLowerCase();
+
+    return this.users.filter(
+      user => user.username.toLowerCase().indexOf(filterValue) === 0 || user.name.toLowerCase().indexOf(filterValue) === 0
+    );
+  }
+
+  onSelectedUser($event) {
+    this.selectedUser = $event.option.value;
+  }
+
+  removeUserFromMador(user) {
+    function remove(tempUser) {
+      return tempUser.id !== user.id;
+    }
+    this.madorToUpdate.users = this.madorToUpdate.users.filter(remove);
+    this.updateMador();
+  }
+
+  // TODO: Bug when adding a second user
+  addUserToMador() {
+    if (!this.matAutocompleteUsers.isOpen) {
+      if (this.selectedUser && this.selectedUser.id) {
+        this.madorToUpdate.users.push(this.selectedUser);
+        this.updateMador();
+      }
+    }
+  }
+
+  removeAdminUserFromMador(user) {
+    function remove(tempUser) {
+      return tempUser.id !== user.id;
+    }
+    this.madorToUpdate.admins = this.madorToUpdate.admins.filter(remove);
+    this.updateMador();
+  }
+
+  // TODO: Bug when adding a second user
+  addAdminUserToMador() {
+    if (!this.matAutocompleteUsers.isOpen) {
+      if (this.selectedUser && this.selectedUser.id) {
+        this.madorToUpdate.admins.push(this.selectedUser);
+        this.updateMador();
+      }
+    }
   }
 }

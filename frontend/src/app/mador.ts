@@ -6,10 +6,11 @@ export class Mador {
     name: string;
     forum_frequency: number;
     number_of_organizers: number;
-    admin: User;
+    admins: User[];
     total_budget: number;
     default_budget_per_forum: number;
     auto_track_forum_budget: boolean;
+    users: User[];
 
     constructor() {
     }

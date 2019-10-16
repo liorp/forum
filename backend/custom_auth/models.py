@@ -26,10 +26,6 @@ class Mador(models.Model):
     name = models.CharField(max_length=50)
     forum_frequency = models.IntegerField(default=1)
     number_of_organizers = models.IntegerField(default=2)
-    admin = models.OneToOneField('custom_auth.User',
-                                 models.deletion.SET_NULL,
-                                 related_name='administered_forum',
-                                 null=True)
     total_budget = models.IntegerField(default=0)
     default_budget_per_forum = models.IntegerField(default=0)
     auto_track_forum_budget = models.BooleanField(default=True)
@@ -37,6 +33,7 @@ class Mador(models.Model):
 
 class User(AbstractUser):
     mador = models.ForeignKey(Mador, models.deletion.SET_NULL, related_name='users', null=True)
+    administered_mador = models.ForeignKey(Mador, models.deletion.SET_NULL, related_name='admins', null=True)
     name = models.CharField(max_length=180, null=True)
 
     class Meta:
@@ -44,4 +41,4 @@ class User(AbstractUser):
 
     @property
     def is_admin_of_mador(self):
-        return hasattr(self, 'administered_forum')
+        return self.administered_mador_id is not None

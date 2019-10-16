@@ -8,6 +8,7 @@ export class User {
     firstPlace: boolean;
     secondPlace: boolean;
     thirdPlace: boolean;
+
     constructor() {
     }
 }

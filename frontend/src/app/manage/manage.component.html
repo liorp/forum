@@ -1,4 +1,17 @@
-<h2>Mador Details:</h2>
+<form>
+  <mat-form-field>
+    <mat-label>Month</mat-label>
+    <input matInput type="month" [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="forumMonth"
+           [(ngModel)]="dateToCalculate">
+  </mat-form-field>
+  <button type="submit" mat-raised-button color="primary" (click)="calculateForums()"
+          [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
+    Calculate forums for {{dateToCalculate | date:'MM/yyyy' }}!
+  </button>
+</form>
+<mat-divider></mat-divider>
+<br>
+<h2>Details</h2>
 <form #ForumsForm="ngForm">
   <mat-form-field>
     <mat-label>Name</mat-label>
@@ -36,12 +49,21 @@
       <mat-chip
         *ngFor="let user of (currentMador$ | async)?.users"
         [selectable]="false"
-        [removable]="(currentUser$ | async)?.is_admin_of_mador">
+        [removable]="(currentUser$ | async)?.is_admin_of_mador"
+        (removed)="removeUserFromMador(user)">
         {{user.username}}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
+      <input
+          #userForumInput
+          [formControl]="madorUsersChipCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="madorUsersChipList"
+          [matChipInputSeparatorKeyCodes]="environment.separatorKeysCodes"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addUserToMador()">
     </mat-chip-list>
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectedUser($event)">
       <mat-option *ngFor="let user of users$ | async" [value]="user">
         {{user.username}}
       </mat-option>
@@ -52,13 +74,23 @@
     <mat-chip-list #madorAdminUsersChipList aria-label="User selection"
                    [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
       <mat-chip
+        *ngFor="let user of (currentMador$ | async)?.admins"
         [selectable]="false"
-        [removable]="false">
-        {{(currentMador$ | async)?.admin.username}}
+        [removable]="(currentUser$ | async)?.is_admin_of_mador"
+        (removed)="removeAdminUserFromMador(user)">
+        {{user.username}}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
+      <input
+          #userForumInput
+          [formControl]="madorUsersChipCtrl"
+          [matAutocomplete]="auto"
+          [matChipInputFor]="madorUsersChipList"
+          [matChipInputSeparatorKeyCodes]="environment.separatorKeysCodes"
+          [matChipInputAddOnBlur]="true"
+          (matChipInputTokenEnd)="addAdminUserToMador()">
     </mat-chip-list>
-    <mat-autocomplete #auto="matAutocomplete">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectedUser($event)">
       <mat-option *ngFor="let user of users$ | async" [value]="user">
         {{user.username}}
       </mat-option>
@@ -88,14 +120,3 @@
     <textarea matInput hidden></textarea>
   </mat-form-field>
 </form>
-<mat-divider></mat-divider>
-<br>
-<mat-form-field>
-  <mat-label>Month</mat-label>
-  <input matInput type="month" [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="forumMonth"
-         [(ngModel)]="dateToCalculate">
-</mat-form-field>
-<button type="submit" mat-raised-button color="primary" (click)="calculateForums()"
-        [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
-  Calculate this month's forums!
-</button>

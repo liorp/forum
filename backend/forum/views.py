@@ -40,7 +40,7 @@ class ForumViewSet(viewsets.ModelViewSet):
         month = int(request.data['month'])
         year = int(request.data['year'])
         mador = Mador.objects.get(id=int(request.data['mador']))
-        if request.user.administered_forum != mador:
+        if request.user.administered_mador != mador:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         try:
             forums_created = self.create_forums(mador, month, year)

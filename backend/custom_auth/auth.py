@@ -131,6 +131,7 @@ def ntlm_auth(request):
 @csrf_exempt
 def login_user(request):
     # return ntlm_auth(request)[1]
+    # TODO: CREATE/GET USER. UPON CREATE, MAKE SURE THE MADOR VALUE IS SET TO THE GROUP OF LDAP.
     user = User.objects.filter(administered_forum__isnull=False)[0]
     token = Token.objects.get_or_create(user=user)[0]
     return JsonResponse({
