@@ -32,7 +32,8 @@ export class ManageComponent implements OnInit {
     }
   ];
   environment = environment;
-  currentMador = null;
+  currentMador$ = null;
+  users$ = null;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
@@ -40,10 +41,9 @@ export class ManageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataService.getCurrentUser().subscribe((currentUser) => {
-      this.currentUser = currentUser;
-      this.currentMador = this.currentUser.mador;
-    });
+    this.currentUser = this.dataService.currentUser;
+    this.currentMador$ = this.dataService.currentMador;
+    this.users$ = this.dataService.users;
   }
 
   calculateForums() {
@@ -51,26 +51,13 @@ export class ManageComponent implements OnInit {
     this.dataService.calculateForums(
       parseInt(this.dateToCalculate.slice(5, 7), 10),
       parseInt(this.dateToCalculate.slice(0, 4), 10),
-      this.currentMador.id
+      this.currentMador$.id
     ).subscribe(() => {
       this.snackBar.open('Calculated forums', null, {
         duration: environment.toastDelay,
       });
     }, (err) => {
       this.snackBar.open('Error on calculating forums', null, {
-        duration: environment.toastDelay,
-      });
-    });
-  }
-
-  getCurrentMador() {
-    return this.dataService.getMador(this.currentMador).subscribe((mador) => {
-      this.currentMador = mador;
-      this.snackBar.open('Fetched mador', null, {
-        duration: environment.toastDelay,
-      });
-    }, (err) => {
-      this.snackBar.open('Error on get mador', null, {
         duration: environment.toastDelay,
       });
     });

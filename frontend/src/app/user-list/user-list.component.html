@@ -1,7 +1,7 @@
 <mat-card-title>
   Users
 </mat-card-title>
-<table mat-table matSort [dataSource]="usersDataSource" matSortActive="forumCount"
+<table mat-table matSort [dataSource]="users | async" matSortActive="forumCount"
        matSortDirection="asc" #sortUsers>
 
   <!-- Username Column -->

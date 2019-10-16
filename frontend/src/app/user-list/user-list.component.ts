@@ -1,11 +1,9 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
-import {Forum} from '../forum';
 import {User} from '../user';
 import {DataService} from '../data.service';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment.prod';
-import {map, startWith} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-list',
@@ -14,17 +12,12 @@ import {map, startWith} from 'rxjs/operators';
 })
 export class UserListComponent implements OnInit {
   dataService: DataService = null;
-  users: User[] = [];
+  users: Observable<User[]>;
   usersTableColumnsToDisplay = ['username', 'forumCount', 'latestForum'];
-  usersDataSource: MatTableDataSource<User>;
   environment = environment;
   snackBar = null;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
-  @ViewChild(MatSort, {static: false})  set matSort(sort: MatSort) {
-    if (this.usersDataSource) {
-      this.usersDataSource.sort = sort;
-    }
-  }
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
@@ -32,9 +25,10 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.users = this.dataService.users;
   }
 
-  getUsers() {
+  /*getUsers() {
     return this.dataService.getUsers().subscribe((users) => {
       this.users.splice(0);
       for (const user of users) {
@@ -62,7 +56,7 @@ export class UserListComponent implements OnInit {
         duration: environment.toastDelay,
       });
     });
-  }
+  }*/
 
   // TODO: FIX THIS NO GOOD
   // Returns a function, that, as long as it continues to be invoked, will not

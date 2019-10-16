@@ -5,12 +5,12 @@
         <mat-card-title class="main-title">
           Forums <img mat-card-avatar src="../assets/Roman_forum_cropped.jpg">
         </mat-card-title>
-        <mat-card-subtitle *ngIf="currentUser">
-          <div *ngIf="currentUser.is_admin_of_mador">
+        <mat-card-subtitle>
+          <div *ngIf="(currentUser$ | async)?.is_admin_of_mador">
             <a mat-button href="/admin">Admin page</a>
             <br>
           </div>
-          Welcome {{currentUser.name}} of {{currentMador.name}}
+          Welcome {{(currentUser$ | async)?.name}} of {{(currentMador$ | async)?.name}}
         </mat-card-subtitle>
         <app-manage></app-manage>
         <br>

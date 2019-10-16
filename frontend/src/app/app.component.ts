@@ -17,8 +17,8 @@ import {environment} from '../environments/environment.prod';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  currentUser = null;
-  currentMador = null;
+  currentUser$ = null;
+  currentMador$ = null;
   dataService: DataService = null;
   snackBar = null;
 
@@ -28,13 +28,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataService.login().subscribe((response) => {
-      this.currentUser = response.user;
-      this.currentMador = this.currentUser.mador;
-      this.snackBar.open('Logged in', null, {
-        duration: environment.toastDelay,
-      });
-    });
+    this.currentUser$ = this.dataService.currentUser;
+    this.currentMador$ = this.dataService.currentMador;
   }
 
   pick(object, keys) {

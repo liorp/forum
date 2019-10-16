@@ -17,19 +17,14 @@ export class ForumListComponent implements OnInit {
   forumUserChipCtrl = new FormControl();
   dataService: DataService = null;
   snackBar = null;
-  forums: Forum[] = [];
+  forums: Observable<Forum[]>;
   forumsTableColumnsToDisplay = ['date', 'users', 'budget', 'notes', 'remove'];
-  forumsDataSource: MatTableDataSource<Forum>;
   users: User[] = [];
   currentUser = null;
   filteredUsers: Observable<User[]>;
   environment = environment;
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
-  @ViewChild(MatSort, {static: false}) set matSort(sort: MatSort) {
-    if (this.forumsDataSource) {
-      this.forumsDataSource.sort = sort;
-    }
-  }
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
@@ -40,35 +35,8 @@ export class ForumListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataService.getCurrentUser().subscribe((currentUser) => {
-      this.currentUser = currentUser;
-    });
-  }
-
-
-  getForums() {
-    return this.dataService.getForums().subscribe((forums) => {
-      this.forums.splice(0);
-      for (const forum of forums) {
-        this.forums.push(forum);
-      }
-      this.forumsDataSource = new MatTableDataSource<Forum>(this.forums);
-      this.forumsDataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'date':
-            return new Date(item.date);
-          default:
-            return item[property];
-        }
-      };
-      this.snackBar.open('Fetched forums', null, {
-        duration: environment.toastDelay,
-      });
-    }, (err) => {
-      this.snackBar.open('Error on getting forums', null, {
-        duration: environment.toastDelay,
-      });
-    });
+    this.forums = this.dataService.forums;
+    this.currentUser = this.dataService.currentUser;
   }
 
   addForum() {
