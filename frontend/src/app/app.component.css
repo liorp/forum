@@ -7,7 +7,11 @@
   background: #eee; }
   .main-container .main-sidenav-content {
     display: flex;
-    justify-items: center; }
+    align-items: center;
+    flex-direction: column; }
+    .main-container .main-sidenav-content footer {
+      color: black;
+      font-family: Roboto, "Helvetica Neue", sans-serif; }
     .main-container .main-sidenav-content .main-card {
       height: fit-content;
       width: 50%;

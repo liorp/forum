@@ -8,7 +8,13 @@
 
   .main-sidenav-content {
     display: flex;
-    justify-items: center;
+    align-items: center;
+    flex-direction: column;
+
+    footer {
+      color: black;
+      font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
 
     .main-card {
       height: fit-content;
