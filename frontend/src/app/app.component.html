@@ -18,7 +18,7 @@
           </mat-tab>
           <mat-tab label="Forums & Users">
             <app-forum-list></app-forum-list>
-            <app-user-list></app-user-list>
+            <app-user-list [users$]="currentMadorUsers$"></app-user-list>
           </mat-tab>
           <mat-tab label="About">
             <app-about></app-about>

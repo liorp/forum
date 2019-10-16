@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataService} from './data.service';
 import {User} from './user';
 import {MatTable, MatTableDataSource} from '@angular/material/table';
@@ -8,7 +8,7 @@ import {FormControl} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {map, startWith, switchMap, mergeMap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../environments/environment.prod';
 
 @Component({
@@ -19,6 +19,9 @@ import {environment} from '../environments/environment.prod';
 export class AppComponent implements OnInit {
   currentUser$ = null;
   currentMador$ = null;
+  currentMadorSubscription = null;
+  currentMadorUsers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+  users$: Observable<User[]>;
   dataService: DataService = null;
   snackBar = null;
 
@@ -30,6 +33,12 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.currentUser$ = this.dataService.currentUser;
     this.currentMador$ = this.dataService.currentMador;
+    this.currentMadorSubscription = this.currentMador$.subscribe((mador) => {
+      if (mador) {
+        this.currentMadorUsers$.next(mador.users);
+      }
+    });
+    this.users$ = this.dataService.users;
   }
 
   refresh() {

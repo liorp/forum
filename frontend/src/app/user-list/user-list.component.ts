@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
 import {User} from '../user';
 import {DataService} from '../data.service';
@@ -11,23 +11,20 @@ import {environment} from '../../environments/environment.prod';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit, OnDestroy {
-  dataService: DataService = null;
-  users$: Observable<User[]>;
   usersDataSource = null;
-  usersSubscription = null;
   usersTableColumnsToDisplay = ['username', 'forumCount', 'latestForum'];
   environment = environment;
   snackBar = null;
+  usersSubscription = null;
+  @Input() users$: Observable<User[]>;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
-    this.dataService = dataService;
     this.snackBar = snackBar;
   }
 
   ngOnInit() {
-    this.users$ = this.dataService.users;
     this.usersSubscription = this.users$.subscribe((users) => {
       const topThreeUsers = users.sort((a, b) => b.forum_count - a.forum_count).slice(0, 3);
       if (topThreeUsers.length) {
@@ -39,14 +36,16 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.usersDataSource.sort = this.sort;
       this.usersDataSource.sortingDataAccessor = (item, property) => {
         switch (property) {
-           case 'latestForumDate': return new Date(item.latest_forum.date);
-           default: return item[property];
+          case 'latestForumDate':
+            return new Date(item.latest_forum.date);
+          default:
+            return item[property];
         }
       };
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.usersSubscription.unsubscribe();
   }
 }
