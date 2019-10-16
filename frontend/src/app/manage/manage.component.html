@@ -9,7 +9,7 @@
     <mat-label>Day of forum</mat-label>
     <mat-select [disabled]="!(currentUser | async).is_admin_of_mador" name="dayOfForum"
                 [value]="(currentMador$ | async).forum_day"
-                (change)="debounce(updateMador, environment.toastDelay, false)($event, currentMador$)">
+                (change)="updateMador($event, currentMador$)">
       <mat-option *ngFor="let day of days" [value]="day.value">
         {{day.name}}
       </mat-option>
@@ -19,13 +19,13 @@
     <mat-label>Number of organizers</mat-label>
     <input matInput type="number" min="0" [disabled]="!(currentUser | async).is_admin_of_mador" name="numberOfOrganizers"
            [value]="(currentMador$ | async).number_of_organizers"
-           (change)="debounce(updateMador, environment.toastDelay, false)($event, currentMador$)">
+           (change)="updateMador($event, currentMador$)">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Frequency (in weeks)</mat-label>
     <input matInput type="number" min="0" [disabled]="!(currentUser | async).is_admin_of_mador" name="forumFrequency"
            [value]="(currentMador$ | async).forum_frequency"
-           (change)="debounce(updateMador, environment.toastDelay, false)($event, currentMador$)">
+           (change)="updateMador($event, currentMador$)">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Month</mat-label>
@@ -52,19 +52,19 @@
     <mat-label>Total Budget</mat-label>
     <input matInput type="number" min="0" [disabled]="!(currentUser | async).is_admin_of_mador" name="totalBudget"
            [value]="(currentMador$ | async).total_budget"
-           (change)="debounce(updateMador, environment.toastDelay, false)($event, currentMador$)">
+           (change)="updateMador($event, currentMador$)">
   </mat-form-field>
   <mat-form-field>
     <mat-label>Default Budget Per Forum</mat-label>
     <input matInput type="number" min="0" [disabled]="!(currentUser | async).is_admin_of_mador" name="defaultBudgetPerForum"
            [value]="(currentMador$ | async).default_budget_per_forum"
-           (change)="debounce(updateMador, environment.toastDelay, false)($event, currentMador$)">
+           (change)="updateMador($event, currentMador$)">
   </mat-form-field>
   <mat-form-field floatLabel="always">
     <mat-label>Auto Track Forum Budget</mat-label>
     <mat-slide-toggle matInput [disabled]="!(currentUser | async).is_admin_of_mador" name="autoTrackForumBudget"
                       [checked]="(currentMador$ | async).auto_track_forum_budget"
-                      (change)="debounce(updateMador, environment.toastDelay, false)($event, currentMador$)">
+                      (change)="updateMador($event, currentMador$)">
     </mat-slide-toggle>
     <textarea matInput hidden></textarea>
   </mat-form-field>

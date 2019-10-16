@@ -55,7 +55,7 @@
       <mat-form-field>
         <input matInput type="number" min="0" [disabled]="!(currentUser | async)?.is_admin_of_mador"
                [(ngModel)]="forum.budget"
-               (ngModelChange)="debounce(updateForum, environment.toastDelay, false)($event, forum)">
+               (ngModelChange)="updateForum($event, forum)">
       </mat-form-field>
     </td>
   </ng-container>
@@ -67,7 +67,7 @@
       <mat-form-field>
                 <textarea matInput type="text" [disabled]="!(currentUser | async)?.is_admin_of_mador"
                           [(ngModel)]="forum.notes"
-                          (ngModelChange)="debounce(updateForum, environment.toastDelay, false)($event, forum)"></textarea>
+                          (ngModelChange)="updateForum($event, forum)"></textarea>
       </mat-form-field>
     </td>
   </ng-container>
