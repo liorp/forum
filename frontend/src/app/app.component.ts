@@ -32,12 +32,15 @@ export class AppComponent implements OnInit {
     this.currentMador$ = this.dataService.currentMador;
   }
 
-  pick(object, keys) {
-    return keys.reduce((obj, key) => {
-      if (object && object.hasOwnProperty(key)) {
-        obj[key] = object[key];
-      }
-      return obj;
-    }, {});
+  refresh() {
+    this.dataService.refresh().subscribe(() => {
+      this.snackBar.open('Refreshed', null, {
+        duration: environment.toastDelay,
+      });
+    }, (err) => {
+      this.snackBar.open('Error on refresh', null, {
+        duration: environment.toastDelay,
+      });
+    });
   }
 }

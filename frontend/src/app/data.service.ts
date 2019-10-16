@@ -39,17 +39,21 @@ export class DataService {
   }
 
   refresh() {
-    this.getCurrentUser();
-    this.getCurrentMador();
-    this.getUsers(null, null, null, null, null);
-    this.getForums(null, null, null, null, null);
+    return forkJoin(
+      this.getCurrentUser(),
+      this.getCurrentMador(),
+      this.getUsers(null, null, null, null, null),
+      this.getForums(null, null, null, null, null)
+    );
   }
 
   getCurrentUser() {
-    this.restangular.one('user', this._currentUser.getValue().id).get().subscribe((data) => {
+    const sub$ = this.restangular.one('user', this._currentUser.getValue().id).get();
+    sub$.subscribe((data) => {
       this.dataStore.currentUser = data;
       this._currentUser.next(JSON.parse(JSON.stringify(this.dataStore)).currentUser);
     });
+    return sub$;
   }
 
   // TODO: IMPLEMENT WITH madorId, filter, sortDirection, pageIndex, pageSize
@@ -63,7 +67,9 @@ export class DataService {
   }
 
   addForum() {
-    return this.restangular.all('forum').customPOST();
+    const sub$ = this.restangular.all('forum').customPOST();
+    sub$.subscribe(() => this.refresh());
+    return sub$;
   }
 
   // TODO: IMPLEMENT WITH madorId, filter, sortDirection, pageIndex, pageSize
@@ -77,13 +83,15 @@ export class DataService {
   }
 
   updateForum(forum: Forum) {
-    return this.restangular.one('forum', forum.id).customPATCH(
+    const sub$ = this.restangular.one('forum', forum.id).customPATCH(
       forum
     );
+    sub$.subscribe(() => this.refresh());
+    return sub$;
   }
 
   calculateForums(month: number, year: number, mador: number) {
-    return this.restangular.all('forum').customPOST(
+    const sub$ = this.restangular.all('forum').customPOST(
       {
         month,
         year,
@@ -91,22 +99,30 @@ export class DataService {
       },
       'calculate'
     );
+    sub$.subscribe(() => this.refresh());
+    return sub$;
   }
 
   removeForum(forum: Forum) {
-    return this.restangular.one('forum', forum.id).remove();
+    const sub$ = this.restangular.one('forum', forum.id).remove();
+    sub$.subscribe(() => this.refresh());
+    return sub$;
   }
 
   getCurrentMador() {
-    this.restangular.one('mador', this._currentUser.getValue().mador.id).get().subscribe((data) => {
+    const currentMador$ = this.restangular.one('mador', this._currentUser.getValue().mador.id).get();
+    currentMador$.subscribe((data) => {
       this.dataStore.currentMador = data;
       this._currentMador.next(JSON.parse(JSON.stringify(this.dataStore)).currentMador);
     });
+    return currentMador$;
   }
 
   updateMador(mador: Mador) {
-    return this.restangular.one('mador', mador.id).customPATCH(
+    const sub$ = this.restangular.one('mador', mador.id).customPATCH(
       mador
     );
+    sub$.subscribe(() => this.refresh());
+    return sub$;
   }
 }

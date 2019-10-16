@@ -31,6 +31,12 @@ class ForumViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def calculate(self, request, *args, **kwargs):
+        if 'month' not in request.data:
+            return Response(data="'month' field is required.", status=status.HTTP_400_BAD_REQUEST)
+        if 'year' not in request.data:
+            return Response(data="'year' field is required.", status=status.HTTP_400_BAD_REQUEST)
+        if 'mador' not in request.data:
+            return Response(data="'mador' field is required.", status=status.HTTP_400_BAD_REQUEST)
         month = int(request.data['month'])
         year = int(request.data['year'])
         mador = Mador.objects.get(id=int(request.data['mador']))

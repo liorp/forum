@@ -18,6 +18,10 @@
         flex-direction: column;
         align-items: center; }
         .main-container .main-sidenav-content .main-card .main-content .main-title {
+          display: flex;
+          align-items: center;
           text-align: center; }
+        .main-container .main-sidenav-content .main-card .main-content .main-page-tab-group {
+          width: 85%; }
 
 /*# sourceMappingURL=app.component.css.map */

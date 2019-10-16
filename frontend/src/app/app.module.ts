@@ -22,7 +22,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatCheckboxModule, MatSlideToggleModule} from '@angular/material';
+import {MatCheckboxModule, MatSlideToggleModule, MatExpansionModule, MatTabsModule} from '@angular/material';
 import { ForumListComponent } from './forum-list/forum-list.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { FirstTimeComponent } from './first-time/first-time.component';
@@ -80,6 +80,8 @@ export function RestangularConfigFactory(RestangularProvider) {
     FlexLayoutModule,
     MatCheckboxModule,
     MatSlideToggleModule,
+    MatExpansionModule,
+    MatTabsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

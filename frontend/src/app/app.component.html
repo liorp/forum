@@ -2,21 +2,25 @@
   <mat-sidenav-content class="main-sidenav-content">
     <mat-card class="main-card">
       <mat-card-content class="main-content">
+        <mat-card-actions fxFlexAlign="end">
+          <button mat-raised-button type="submit" color="primary" (click)="refresh()"><mat-icon>refresh</mat-icon></button>
+          <a mat-raised-button *ngIf="(currentUser$ | async)?.is_admin_of_mador" type="submit" color="primary" href="/admin"><mat-icon>settings</mat-icon></a>
+        </mat-card-actions>
         <mat-card-title class="main-title">
-          Forums <img mat-card-avatar src="../assets/Roman_forum_cropped.jpg">
+          Forums &nbsp;<img mat-card-avatar src="../assets/Roman_forum_cropped.jpg">
         </mat-card-title>
         <mat-card-subtitle>
-          <div *ngIf="(currentUser$ | async)?.is_admin_of_mador">
-            <a mat-button href="/admin">Admin page</a>
-            <br>
-          </div>
           Welcome {{(currentUser$ | async)?.name}} of {{(currentMador$ | async)?.name}}
         </mat-card-subtitle>
-        <app-manage></app-manage>
-        <br>
-        <app-forum-list></app-forum-list>
-        <br>
-        <app-user-list></app-user-list>
+        <mat-tab-group class="main-page-tab-group" mat-align-tabs="center">
+          <mat-tab label="Manage">
+            <app-manage></app-manage>
+          </mat-tab>
+          <mat-tab label="Forums & Users">
+            <app-forum-list></app-forum-list>s
+            <app-user-list></app-user-list>
+          </mat-tab>
+        </mat-tab-group>
       </mat-card-content>
     </mat-card>
   </mat-sidenav-content>

@@ -21,9 +21,14 @@
         flex-direction: column;
         align-items: center;
 
-
         .main-title {
+          display: flex;
+          align-items: center;
           text-align: center;
+        }
+
+        .main-page-tab-group {
+          width: 85%;
         }
       }
     }

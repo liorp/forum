@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
+import {MatAutocomplete, MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
 import {Forum} from '../forum';
 import {FormControl} from '@angular/forms';
 import {DataService} from '../data.service';
@@ -20,33 +20,42 @@ export class ForumListComponent implements OnInit, OnDestroy {
   forums$: Observable<Forum[]>;
   forumsDataSource = null;
   forumsSubscription = null;
+  usersSubscription = null;
   forumsTableColumnsToDisplay = ['date', 'users', 'budget', 'notes', 'remove'];
-  users: User[] = [];
+  users$ = null;
+  users = null;
   currentUser$ = null;
+  selectedUser = null;
   filteredUsers: Observable<User[]>;
   environment = environment;
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatAutocomplete, {static: false}) matAutocomplete: MatAutocomplete;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
     this.snackBar = snackBar;
     this.filteredUsers = this.forumUserChipCtrl.valueChanges.pipe(
       startWith(null),
-      map((user: string | null) => user ? this._filterUsers(user) : this.users.slice()));
+      map((user: string | null) => user && typeof user === 'string' ? this._filterUsers(user) : this.users.slice()));
   }
 
   ngOnInit() {
     this.forums$ = this.dataService.forums;
     this.currentUser$ = this.dataService.currentUser;
+    this.users$ = this.dataService.users;
     this.forumsSubscription = this.forums$.subscribe((forums) => {
       this.forumsDataSource = new MatTableDataSource(forums);
       this.forumsDataSource.sort = this.sort;
+    });
+    this.usersSubscription = this.users$.subscribe((users) => {
+      this.users = users;
     });
   }
 
   ngOnDestroy() {
     this.forumsSubscription.unsubscribe();
+    this.usersSubscription.unsubscribe();
   }
 
   addForum() {
@@ -63,7 +72,7 @@ export class ForumListComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateForum(ev, forum) {
+  updateForum(forum) {
     // Hacks for writing foreign key to drf
     // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
     // (https://stackoverflow.com/questions/122102/what-is-the-most-efficient-way-to-deep-clone-an-object-in-javascript)
@@ -97,11 +106,25 @@ export class ForumListComponent implements OnInit, OnDestroy {
   }
 
   removeUserFromForum(user, forum) {
-    return;
+    function remove(tempUser) {
+      return tempUser.id !== user.id;
+    }
+    forum.users = forum.users.filter(remove);
+    this.updateForum(forum);
   }
 
-  addUserToForum($event, forum) {
-    return;
+  // TODO: Bug when adding a second user
+  addUserToForum(forum) {
+    if (!this.matAutocomplete.isOpen) {
+      if (this.selectedUser && this.selectedUser.id) {
+        forum.users.push(this.selectedUser);
+        this.updateForum(forum);
+      }
+    }
+  }
+
+  onSelectedUser($event) {
+    this.selectedUser = $event.option.value;
   }
 
   private _filterUsers(value: string): User[] {

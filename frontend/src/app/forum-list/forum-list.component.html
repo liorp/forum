@@ -8,7 +8,7 @@
     <th mat-header-cell *matHeaderCellDef> Users</th>
     <td mat-cell *matCellDef="let forum">
       <mat-form-field class="forum-users-chip-list">
-        <mat-chip-list #chipList aria-label="User selection">
+        <mat-chip-list #usersChipList aria-label="User selection">
           <mat-chip
             *ngFor="let user of forum.users"
             [selectable]="false"
@@ -21,13 +21,13 @@
               #userForumInput
               [formControl]="forumUserChipCtrl"
               [matAutocomplete]="auto"
-              [matChipInputFor]="chipList"
+              [matChipInputFor]="usersChipList"
               [matChipInputSeparatorKeyCodes]="environment.separatorKeysCodes"
               [matChipInputAddOnBlur]="true"
-              (matChipInputTokenEnd)="addUserToForum($event, forum)">
+              (matChipInputTokenEnd)="addUserToForum(forum)">
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let user of filteredUsers | async" [value]="user.id">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectedUser($event)">
+          <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
             {{user.name}} ({{user.username}})
           </mat-option>
         </mat-autocomplete>
@@ -43,19 +43,19 @@
         <input matInput type="date" [disabled]="!(currentUser$ | async)?.is_admin_of_mador"
                value="{{forum.date | date:'yyyy-MM-dd'}}"
                [(ngModel)]="forum.date"
-               (ngModelChange)="updateForum($event, forum)">
+               (ngModelChange)="updateForum(forum)">
       </mat-form-field>
     </td>
   </ng-container>
 
   <!-- Budget Column -->
   <ng-container matColumnDef="budget">
-    <th mat-header-cell *matHeaderCellDef>Budget</th>
+    <th mat-header-cell mat-sort-header="budget" *matHeaderCellDef>Budget</th>
     <td mat-cell *matCellDef="let forum">
       <mat-form-field>
         <input matInput type="number" min="0" [disabled]="!(currentUser$ | async)?.is_admin_of_mador"
                [(ngModel)]="forum.budget"
-               (ngModelChange)="updateForum($event, forum)">
+               (ngModelChange)="updateForum(forum)">
       </mat-form-field>
     </td>
   </ng-container>
@@ -67,7 +67,7 @@
       <mat-form-field>
                 <textarea matInput type="text" [disabled]="!(currentUser$ | async)?.is_admin_of_mador"
                           [(ngModel)]="forum.notes"
-                          (ngModelChange)="updateForum($event, forum)"></textarea>
+                          (ngModelChange)="updateForum(forum)"></textarea>
       </mat-form-field>
     </td>
   </ng-container>
@@ -89,6 +89,6 @@
   <tr mat-header-row *matHeaderRowDef="forumsTableColumnsToDisplay"></tr>
   <tr mat-row *matRowDef="let row; columns: forumsTableColumnsToDisplay;"></tr>
 </table>
-<button type="submit" mat-raised-button (click)="addForum()" *ngIf="currentUser$" [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
+<button type="submit" mat-raised-button color="primary" (click)="addForum()" *ngIf="currentUser$" [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
   Manually add a forum
 </button>
