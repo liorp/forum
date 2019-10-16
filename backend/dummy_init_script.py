@@ -22,7 +22,7 @@ def run():
     u3.is_superuser = True
     u3.is_staff = True
     u3.save()
-    m.admin = u
+    m.admins.set([u])
     m.save()
     m.users.set([u, u2, u3])
     m.save()
@@ -36,7 +36,7 @@ def run():
     uu2.is_superuser = True
     uu2.is_staff = True
     uu2.save()
-    m1.admin = uu1
+    m1.admins.set([uu1])
     m1.save()
     m1.users.set([uu1, uu2])
     m1.save()

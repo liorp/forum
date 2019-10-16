@@ -32,4 +32,4 @@ class UserSerializer(serializers.ModelSerializer):
         return user.forums.count()
 
     def get_latest_forum(self, user):
-        return ForumForUserSerializer(user.forums.latest()).data
+        return ForumForUserSerializer(user.forums.latest()).data if user.forums.count() else None

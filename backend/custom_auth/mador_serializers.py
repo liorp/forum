@@ -33,7 +33,7 @@ class MadorSerializer(serializers.ModelSerializer):
         model = Mador
         fields = ['id', 'name', 'users', 'forum_frequency', 'forum_day', 'admins',
                   'number_of_organizers', 'total_budget', 'default_budget_per_forum', 'auto_track_forum_budget',
-                  'users_id', 'admin_id']
+                  'users_id', 'admins_id']
 
     def create(self, validated_data):
         return Mador.objects.create(**validated_data)
