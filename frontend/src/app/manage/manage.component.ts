@@ -75,6 +75,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     });
   }
 
+  // TODO: Solve doubleupdate
   updateMador() {
     // Hacks for writing foreign key to drf
     // (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)

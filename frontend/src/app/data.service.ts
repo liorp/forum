@@ -42,8 +42,8 @@ export class DataService {
     return forkJoin(
       this.getCurrentUser(),
       this.getCurrentMador(),
-      this.getUsers(null, null, null, null, null),
-      this.getForums(null, null, null, null, null)
+      this.getUsers(),
+      this.getForums()
     );
   }
 
@@ -56,8 +56,7 @@ export class DataService {
     return sub$;
   }
 
-  // TODO: IMPLEMENT WITH madorId, filter, sortDirection, pageIndex, pageSize
-  getUsers(madorId, filter, sortDirection, pageIndex, pageSize) {
+  getUsers() {
     const users$ = this.restangular.all('user').getList();
     users$.subscribe((data) => {
       this.dataStore.users = data;
@@ -72,8 +71,7 @@ export class DataService {
     return sub$;
   }
 
-  // TODO: IMPLEMENT WITH madorId, filter, sortDirection, pageIndex, pageSize
-  getForums(madorId, filter, sortDirection, pageIndex, pageSize) {
+  getForums() {
     const forums$ = this.restangular.all('forum').getList();
     forums$.subscribe((data) => {
       this.dataStore.forums = data;
