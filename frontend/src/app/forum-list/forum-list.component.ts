@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
 import {Forum} from '../forum';
 import {FormControl} from '@angular/forms';
@@ -13,18 +13,20 @@ import { environment } from '../../environments/environment.prod';
   templateUrl: './forum-list.component.html',
   styleUrls: ['./forum-list.component.scss']
 })
-export class ForumListComponent implements OnInit {
+export class ForumListComponent implements OnInit, OnDestroy {
   forumUserChipCtrl = new FormControl();
   dataService: DataService = null;
   snackBar = null;
-  forums: Observable<Forum[]>;
+  forums$: Observable<Forum[]>;
+  forumsDataSource = null;
+  forumsSubscription = null;
   forumsTableColumnsToDisplay = ['date', 'users', 'budget', 'notes', 'remove'];
   users: User[] = [];
-  currentUser = null;
+  currentUser$ = null;
   filteredUsers: Observable<User[]>;
   environment = environment;
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
@@ -35,8 +37,16 @@ export class ForumListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.forums = this.dataService.forums;
-    this.currentUser = this.dataService.currentUser;
+    this.forums$ = this.dataService.forums;
+    this.currentUser$ = this.dataService.currentUser;
+    this.forumsSubscription = this.forums$.subscribe((forums) => {
+      this.forumsDataSource = new MatTableDataSource(forums);
+      this.forumsDataSource.sort = this.sort;
+    });
+  }
+
+  ngOnDestroy() {
+    this.forumsSubscription.unsubscribe();
   }
 
   addForum() {
@@ -101,5 +111,4 @@ export class ForumListComponent implements OnInit {
       user => user.username.toLowerCase().indexOf(filterValue) === 0 || user.name.toLowerCase().indexOf(filterValue) === 0
     );
   }
-
 }
