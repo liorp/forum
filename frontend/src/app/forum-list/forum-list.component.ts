@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatAutocomplete, MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
 import {Forum} from '../forum';
 import {FormControl} from '@angular/forms';
@@ -7,6 +7,7 @@ import {map, startWith} from 'rxjs/operators';
 import {User} from '../user';
 import {Observable} from 'rxjs';
 import { environment } from '../../environments/environment.prod';
+import {Mador} from '../mador';
 
 @Component({
   selector: 'app-forum-list',
@@ -17,17 +18,17 @@ export class ForumListComponent implements OnInit, OnDestroy {
   forumUserChipCtrl = new FormControl();
   dataService: DataService = null;
   snackBar = null;
-  forums$: Observable<Forum[]>;
   forumsDataSource = null;
   forumsSubscription = null;
   usersSubscription = null;
   forumsTableColumnsToDisplay = ['date', 'users', 'budget', 'notes', 'remove'];
-  users$ = null;
   users = null;
-  currentUser$ = null;
   selectedUser = null;
   filteredUsers: Observable<User[]>;
   environment = environment;
+  @Input() currentUser$: Observable<User>;
+  @Input() users$: Observable<User[]>;
+  @Input() forums$: Observable<User[]>;
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatAutocomplete, {static: false}) matAutocomplete: MatAutocomplete;
@@ -41,9 +42,6 @@ export class ForumListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.forums$ = this.dataService.forums;
-    this.currentUser$ = this.dataService.currentUser;
-    this.users$ = this.dataService.users;
     this.forumsSubscription = this.forums$.subscribe((forums) => {
       this.forumsDataSource = new MatTableDataSource(forums);
       this.forumsDataSource.sort = this.sort;

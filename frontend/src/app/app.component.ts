@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   currentMador$ = null;
   currentMadorSubscription = null;
   currentMadorUsers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
+  forums$ = null;
   users$: Observable<User[]>;
   dataService: DataService = null;
   snackBar = null;
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.currentUser$ = this.dataService.currentUser;
     this.currentMador$ = this.dataService.currentMador;
+    this.forums$ = this.dataService.forums;
     this.currentMadorSubscription = this.currentMador$.subscribe((mador) => {
       if (mador) {
         this.currentMadorUsers$.next(mador.users);

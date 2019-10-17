@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataService} from '../data.service';
 import {MatAutocomplete, MatSnackBar} from '@angular/material';
 import { environment } from '../../environments/environment.prod';
@@ -6,6 +6,7 @@ import {Mador} from '../mador';
 import {User} from '../user';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-manage',
@@ -14,7 +15,6 @@ import {FormControl} from '@angular/forms';
 })
 export class ManageComponent implements OnInit, OnDestroy {
   madorUsersChipCtrl = new FormControl();
-  currentUser$ = null;
   dateToCalculate = new Date().toISOString().slice(0, 7);
   dataService: DataService = null;
   snackBar = null;
@@ -37,14 +37,15 @@ export class ManageComponent implements OnInit, OnDestroy {
     }
   ];
   environment = environment;
-  currentMador$ = null;
-  users$ = null;
   users = null;
   madorToUpdate: Mador = new Mador();
   currentMadorSubscription = null;
   usersSubscription = null;
   filteredUsers = null;
   selectedUser = null;
+  @Input() currentMador$: Observable<Mador>;
+  @Input() currentUser$: Observable<User>;
+  @Input() users$: Observable<User[]>;
   @ViewChild('madorUsersAutocomplete', {static: false}) matAutocompleteUsers: MatAutocomplete;
   @ViewChild('madorAdminAutocomplete', {static: false}) matAutocompleteAdmin: MatAutocomplete;
 
@@ -57,11 +58,10 @@ export class ManageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.currentUser$ = this.dataService.currentUser;
-    this.currentMador$ = this.dataService.currentMador;
-    this.users$ = this.dataService.users;
     this.usersSubscription = this.users$.subscribe((users) => {
-      this.users = users;
+      if (users) {
+        this.users = users;
+      }
     });
     this.currentMadorSubscription = this.currentMador$.subscribe((currentMador) => {
       if (currentMador) {
@@ -72,6 +72,7 @@ export class ManageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentMadorSubscription.unsubscribe();
+    this.usersSubscription.unsubscribe();
   }
 
   calculateForums() {
