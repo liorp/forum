@@ -11,7 +11,10 @@
     flex-direction: column; }
     .main-container .main-sidenav-content footer {
       color: black;
-      font-family: Roboto, "Helvetica Neue", sans-serif; }
+      font-family: Brush Script MT, Brush Script Std, cursive;
+      padding-bottom: 8px; }
+      .main-container .main-sidenav-content footer a {
+        text-decoration: none; }
     .main-container .main-sidenav-content .main-card {
       height: fit-content;
       width: 50%;
@@ -21,6 +24,8 @@
         display: flex;
         flex-direction: column;
         align-items: center; }
+        .main-container .main-sidenav-content .main-card .main-content ::ng-deep .mat-card-actions {
+          padding: 0; }
         .main-container .main-sidenav-content .main-card .main-content .main-title {
           display: flex;
           align-items: center;

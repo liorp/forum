@@ -13,7 +13,11 @@
 
     footer {
       color: black;
-      font-family: Roboto, "Helvetica Neue", sans-serif;
+      font-family: Brush Script MT, Brush Script Std, cursive;
+      padding-bottom: 8px;
+      a {
+        text-decoration: none;
+      }
     }
 
     .main-card {
@@ -26,6 +30,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        ::ng-deep .mat-card-actions {
+          padding: 0;
+        }
 
         .main-title {
           display: flex;

@@ -87,7 +87,7 @@
   <tr mat-header-row *matHeaderRowDef="forumsTableColumnsToDisplay"></tr>
   <tr mat-row *matRowDef="let row; columns: forumsTableColumnsToDisplay;"></tr>
 </table>
-<button type="submit" mat-raised-button color="primary" (click)="addForum()" *ngIf="currentUser$" [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
+<button class="center-aligned-button" type="submit" mat-raised-button color="primary" (click)="addForum()" *ngIf="currentUser$" [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
   <mat-icon>add</mat-icon>
   Manually add a forum
 </button>

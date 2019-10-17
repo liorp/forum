@@ -23,16 +23,16 @@ table {
   width: 75%;
 
   .mat-row, .mat-header-row, .mat-footer-row {
-    padding-left: 24px;
-    padding-right: 24px;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
   }
 
   .mat-cell:first-child, .mat-footer-cell:first-child, .mat-header-cell:first-child {
-    padding-left: 0;
+    padding-left: 0 !important;
   }
 
   .mat-cell:last-child, .mat-footer-cell:last-child, .mat-header-cell:last-child {
-    padding-right: 0;
+    padding-right: 0 !important;
   }
 
   .mat-sort-header-container {
@@ -47,3 +47,21 @@ table {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.center-aligned-button {
+  .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.disabled-text {
+  color: gray;
+}
+
+.regular-cursor {
+  cursor: default !important;
+}
+
+.auto-width {
+  width: auto !important;
+}
