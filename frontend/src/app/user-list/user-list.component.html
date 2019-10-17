@@ -34,8 +34,8 @@
 </table>
 <h3>Export Table</h3>
 <div class="export-section">
-  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('xlsx')">Excel (XLSX)</button>&nbsp;
-  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('csv')">CSV</button>&nbsp;
-  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('json')">JSON</button>&nbsp;
-  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('txt')">TXT</button>
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable(ExportType.XLSX)">Excel (XLSX)</button>&nbsp;
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable(ExportType.CSV)">CSV</button>&nbsp;
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable(ExportType.JSON)">JSON</button>&nbsp;
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable(ExportType.TXT)">TXT</button>
 </div>

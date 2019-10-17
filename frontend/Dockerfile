@@ -1,6 +1,7 @@
 ### Stage 1: build ###
 
 FROM node:12.12.0-alpine as builder
+LABEL maintainer="Lior Pollak"
 
 # Set working directory.
 RUN mkdir /frontend
@@ -9,8 +10,10 @@ WORKDIR /frontend
 # Copy app dependencies.
 COPY package.json package-lock.json /frontend/
 
+RUN ls /frontend
+
 # Install app dependencies.
-RUN npm install --prefix frontend
+RUN npm install
 
 # Copy app files.
 COPY . /frontend
@@ -19,7 +22,7 @@ COPY . /frontend
 ARG configuration=production
 
 # Build app
-RUN npm run build --prefix frontend -- --output-path=./dist/out --configuration $configuration
+RUN npm run build -- --output-path=./dist/out --configuration $configuration
 
 
 ### Stage 2: delivery ###

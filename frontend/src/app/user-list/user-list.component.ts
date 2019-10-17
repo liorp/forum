@@ -4,6 +4,7 @@ import {User} from '../user';
 import {DataService} from '../data.service';
 import {Observable} from 'rxjs';
 import {environment} from '../../environments/environment.prod';
+import { ExportType } from 'mat-table-exporter';
 
 @Component({
   selector: 'app-user-list',
@@ -21,6 +22,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     secondPlace: 'This user has done the second most forums',
     thirdPlace: 'This user has done the third most forums',
   };
+  ExportType = ExportType;
   @Input() users$: Observable<User[]>;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
