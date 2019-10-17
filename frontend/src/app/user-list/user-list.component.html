@@ -6,7 +6,13 @@
   <ng-container matColumnDef="username">
     <th mat-header-cell mat-sort-header="username" *matHeaderCellDef> Username</th>
     <td mat-cell *matCellDef="let user">
-      {{ user.firstPlace ? '🥇' : user.secondPlace ? '🥈' : user.thirdPlace ? '🥉' : '' }} {{user.username}}
+      <button mat-flat-button
+              *ngIf="user.firstPlace || user.secondPlace || user.thirdPlace"
+              [matTooltip]="user.firstPlace ? userPlaceDescriptions.firstPlace : user.secondPlace ? userPlaceDescriptions.secondPlace : user.thirdPlace ? userPlaceDescriptions.thirdPlace : ''"
+              [matTooltipPosition]="'above'"
+              [disableRipple]="true">
+        {{ user.firstPlace ? '🥇' : user.secondPlace ? '🥈' : user.thirdPlace ? '🥉' : '' }}
+      </button> {{user.username}}
     </td>
   </ng-container>
 

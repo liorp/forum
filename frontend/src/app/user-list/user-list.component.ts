@@ -16,6 +16,11 @@ export class UserListComponent implements OnInit, OnDestroy {
   environment = environment;
   snackBar = null;
   usersSubscription = null;
+  userPlaceDescriptions = {
+    firstPlace: 'This user has done the most forums',
+    secondPlace: 'This user has done the second most forums',
+    thirdPlace: 'This user has done the third most forums',
+  };
   @Input() users$: Observable<User[]>;
   @ViewChild(MatTable, {static: false}) usersTable: MatTable<User>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
