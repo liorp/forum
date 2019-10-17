@@ -6,6 +6,7 @@
   </mat-form-field>
   <button type="submit" mat-raised-button color="primary" (click)="calculateForums()"
           [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
+    <mat-icon>cake</mat-icon>
     Calculate forums for {{dateToCalculate | date:'MM/yyyy' }}!
   </button>
 </form>

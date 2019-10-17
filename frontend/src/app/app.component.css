@@ -27,5 +27,7 @@
           text-align: center; }
         .main-container .main-sidenav-content .main-card .main-content .main-page-tab-group {
           width: 85%; }
+          .main-container .main-sidenav-content .main-card .main-content .main-page-tab-group .mat-tab-body-content {
+            overflow: hidden; }
 
 /*# sourceMappingURL=app.component.css.map */

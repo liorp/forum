@@ -35,6 +35,9 @@
 
         .main-page-tab-group {
           width: 85%;
+          .mat-tab-body-content {
+            overflow: hidden;
+          }
         }
       }
     }

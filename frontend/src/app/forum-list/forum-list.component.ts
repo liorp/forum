@@ -94,31 +94,35 @@ export class ForumListComponent implements OnInit, OnDestroy {
   }
 
   removeForum(ev, forum) {
-    this.dataService.removeForum(forum).subscribe(() => {
+    const sub = this.dataService.removeForum(forum).subscribe(() => {
       this.snackBar.open('Removed forum', null, {
         duration: environment.toastDelay,
       });
+      sub.unsubscribe();
     }, (err) => {
       this.snackBar.open('Error on remove forum', null, {
         duration: environment.toastDelay,
       });
+      sub.unsubscribe();
     });
   }
 
   removeUserFromForum(user, forum) {
+    const forumCopy = JSON.parse(JSON.stringify(forum));
     function remove(tempUser) {
       return tempUser.id !== user.id;
     }
-    forum.users = forum.users.filter(remove);
-    this.updateForum(forum);
+    forumCopy.users = forumCopy.users.filter(remove);
+    this.updateForum(forumCopy);
   }
 
   // TODO: Bug when adding a second user
   addUserToForum(forum) {
     if (!this.matAutocomplete.isOpen) {
       if (this.selectedUser && this.selectedUser.id) {
-        forum.users.push(this.selectedUser);
-        this.updateForum(forum);
+        const forumCopy = JSON.parse(JSON.stringify(forum));
+        forumCopy.users.push(this.selectedUser);
+        this.updateForum(forumCopy);
       }
     }
   }
