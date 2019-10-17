@@ -2,7 +2,7 @@
   <mat-form-field>
     <mat-label>Month</mat-label>
     <input matInput type="month" [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="forumMonth"
-           [(ngModel)]="dateToCalculate">
+           [(ngModel)]="dateToCalculate" required>
   </mat-form-field>
   <button class="center-aligned-button" type="submit" mat-raised-button color="primary" (click)="calculateForums()"
           [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
@@ -18,13 +18,13 @@
     <mat-label>Name</mat-label>
     <input matInput type="text" [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="madorName"
            [value]="(currentMador$ | async)?.name" [(ngModel)]="madorToUpdate.name"
-           (ngModelChange)="updateMador()">
+           (ngModelChange)="updateMador()" required>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Day of forum</mat-label>
     <mat-select [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="dayOfForum"
                 [value]="(currentMador$ | async)?.forum_day" [(ngModel)]="madorToUpdate.forum_day"
-                (ngModelChange)="updateMador()">
+                (ngModelChange)="updateMador()" required>
       <mat-option *ngFor="let day of days" [value]="day.value">
         {{day.name}}
       </mat-option>
@@ -35,13 +35,13 @@
     <input matInput type="number" min="0" [disabled]="!(currentUser$ | async)?.is_admin_of_mador"
            name="numberOfOrganizers"
            [value]="(currentMador$ | async)?.number_of_organizers" [(ngModel)]="madorToUpdate.number_of_organizers"
-           (ngModelChange)="updateMador()">
+           (ngModelChange)="updateMador()" required>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Frequency (in weeks)</mat-label>
     <input matInput type="number" min="0" [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="forumFrequency"
            [value]="(currentMador$ | async)?.forum_frequency" [(ngModel)]="madorToUpdate.forum_frequency"
-           (ngModelChange)="updateMador()">
+           (ngModelChange)="updateMador()" required>
   </mat-form-field>
   <mat-form-field class="forum-users-chip-list">
     <mat-label>Mador's users</mat-label>
@@ -101,7 +101,7 @@
     <mat-label>Total Budget</mat-label>
     <input matInput type="number" min="0" [disabled]="!(currentUser$ | async)?.is_admin_of_mador" name="totalBudget"
            [value]="(currentMador$ | async)?.total_budget" [(ngModel)]="madorToUpdate.total_budget"
-           (ngModelChange)="updateMador()">
+           (ngModelChange)="updateMador()" required>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Default Budget Per Forum</mat-label>
@@ -109,7 +109,7 @@
            name="defaultBudgetPerForum"
            [value]="(currentMador$ | async)?.default_budget_per_forum"
            [(ngModel)]="madorToUpdate.default_budget_per_forum"
-           (ngModelChange)="updateMador()">
+           (ngModelChange)="updateMador()" required>
   </mat-form-field>
   <mat-form-field floatLabel="always">
     <mat-label>Auto Track Forum Budget</mat-label>

@@ -92,7 +92,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     });
     this.currentMadorSubscription = this.currentMador$.subscribe((currentMador) => {
       if (currentMador) {
-        this.madorToUpdate.id = currentMador.id;
+        this.madorToUpdate = JSON.parse(JSON.stringify(currentMador));
       }
     });
   }
