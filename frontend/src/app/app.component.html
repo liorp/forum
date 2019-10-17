@@ -4,7 +4,7 @@
       <mat-card-content class="main-content">
         <mat-card-actions fxFlexAlign="end">
           <button mat-icon-button type="submit" (click)="refresh()" [matTooltipPosition]="'above'" matTooltip="Refresh"><mat-icon>refresh</mat-icon></button>
-          <a mat-icon-button *ngIf="(currentUser$ | async)?.is_admin_of_mador" type="submit" href="/admin"  [matTooltipPosition]="'above'" matTooltip="Admin Page"><mat-icon>settings</mat-icon></a>
+          <a mat-icon-button *ngIf="(currentUser$ | async)?.is_admin_of_mador" type="submit" [href]="sanitize((serverName$ | async) + '/admin')" target="_blank" [matTooltipPosition]="'above'" matTooltip="Admin Page"><mat-icon>settings</mat-icon></a>
         </mat-card-actions>
         <mat-card-title class="main-title">
           Forums &nbsp;<img mat-card-avatar src="../assets/Roman_forum_cropped.jpg">

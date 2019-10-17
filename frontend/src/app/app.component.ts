@@ -10,6 +10,7 @@ import {MatSort} from '@angular/material/sort';
 import {map, startWith, switchMap, mergeMap} from 'rxjs/operators';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../environments/environment.prod';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -22,18 +23,22 @@ export class AppComponent implements OnInit {
   currentMadorSubscription = null;
   currentMadorUsers$: BehaviorSubject<User[]> = new BehaviorSubject<User[]>([]);
   forums$ = null;
+  serverName$ = null;
   users$: Observable<User[]>;
   dataService: DataService = null;
   snackBar = null;
+  sanitizer = null;
 
-  constructor(dataService: DataService, snackBar: MatSnackBar) {
+  constructor(dataService: DataService, snackBar: MatSnackBar, sanitizer: DomSanitizer) {
     this.dataService = dataService;
     this.snackBar = snackBar;
+    this.sanitizer = sanitizer;
   }
 
   ngOnInit() {
     this.currentUser$ = this.dataService.currentUser;
     this.currentMador$ = this.dataService.currentMador;
+    this.serverName$ = this.dataService.serverName;
     this.forums$ = this.dataService.forums;
     this.currentMadorSubscription = this.currentMador$.subscribe((mador) => {
       if (mador) {
@@ -53,5 +58,9 @@ export class AppComponent implements OnInit {
         duration: environment.toastDelay,
       });
     });
+  }
+
+  sanitize(url: string) {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
   }
 }

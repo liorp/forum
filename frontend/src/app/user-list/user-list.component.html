@@ -1,6 +1,6 @@
 <h2>Users</h2>
-<table mat-table matSort [dataSource]="usersDataSource" matSortActive="forumCount"
-       matSortDirection="asc" #sortUsers>
+<table mat-table matTableExporter matSort [dataSource]="usersDataSource" matSortActive="forumCount"
+       matSortDirection="asc" #sortUsers #exporter="matTableExporter">
 
   <!-- Username Column -->
   <ng-container matColumnDef="username">
@@ -32,3 +32,10 @@
   <tr mat-header-row *matHeaderRowDef="usersTableColumnsToDisplay"></tr>
   <tr mat-row *matRowDef="let row; columns: usersTableColumnsToDisplay;"></tr>
 </table>
+<h3>Export Table</h3>
+<div class="export-section">
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('xlsx')">Excel (XLSX)</button>&nbsp;
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('csv')">CSV</button>&nbsp;
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('json')">JSON</button>&nbsp;
+  <button mat-raised-button class="center-aligned-button" color="accent" (click)="exporter.exportTable('txt')">TXT</button>
+</div>

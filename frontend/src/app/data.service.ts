@@ -13,15 +13,17 @@ export class DataService {
   private _currentUser: BehaviorSubject<User> = new BehaviorSubject(null);
   private _currentMador: BehaviorSubject<Mador> = new BehaviorSubject(null);
   private _forums: BehaviorSubject<Forum[]> = new BehaviorSubject([]);
+  private _serverName: BehaviorSubject<string> = new BehaviorSubject(null);
 
-  private dataStore: { users: User[], forums: User[], currentUser: User, currentMador: Mador } = {
-    users: [], currentUser: null, currentMador: null, forums: []
+  private dataStore: { users: User[], forums: User[], currentUser: User, currentMador: Mador, serverName: string } = {
+    users: [], currentUser: null, currentMador: null, forums: [], serverName: null
   };
 
   public readonly users = this._users.asObservable();
   public readonly currentUser = this._currentUser.asObservable();
   public readonly currentMador = this._currentMador.asObservable();
   public readonly forums = this._forums.asObservable();
+  public readonly serverName = this._serverName.asObservable();
 
   constructor(private restangular: Restangular) {
     this.login();
@@ -32,8 +34,10 @@ export class DataService {
       this.restangular.provider.setDefaultHeaders({Authorization: 'Token ' + data.token});
       this.dataStore.currentUser = data.user;
       this.dataStore.currentMador = data.mador;
+      this.dataStore.serverName = data.server_name;
       this._currentUser.next(JSON.parse(JSON.stringify(this.dataStore)).currentUser);
       this._currentMador.next(JSON.parse(JSON.stringify(this.dataStore)).currentMador);
+      this._serverName.next(JSON.parse(JSON.stringify(this.dataStore)).serverName);
       this.refresh();
     });
   }
