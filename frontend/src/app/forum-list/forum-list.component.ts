@@ -51,9 +51,9 @@ export class ForumListComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this.forumsSubscription.unsubscribe();
+  ngOnDestroy(): void {
     this.usersSubscription.unsubscribe();
+    this.forumsSubscription.unsubscribe();
   }
 
   addForum() {

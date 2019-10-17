@@ -1,12 +1,13 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DataService} from '../data.service';
 import {MatAutocomplete, MatSnackBar} from '@angular/material';
-import { environment } from '../../environments/environment.prod';
+import {environment} from '../../environments/environment.prod';
 import {Mador} from '../mador';
 import {User} from '../user';
 import {map, startWith} from 'rxjs/operators';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
+import {renderConstantPool} from '@angular/compiler-cli/ngcc/src/rendering/renderer';
 
 @Component({
   selector: 'app-manage',
@@ -15,6 +16,7 @@ import {Observable} from 'rxjs';
 })
 export class ManageComponent implements OnInit, OnDestroy {
   madorUsersChipCtrl = new FormControl();
+  madorAdminUsersChipCtrl = new FormControl();
   dateToCalculate = new Date().toISOString().slice(0, 7);
   dataService: DataService = null;
   snackBar = null;
@@ -38,29 +40,54 @@ export class ManageComponent implements OnInit, OnDestroy {
   ];
   environment = environment;
   users = null;
+  currentMadorUsers = null;
   madorToUpdate: Mador = new Mador();
   currentMadorSubscription = null;
+  currentMadorUsersSubscription = null;
   usersSubscription = null;
-  filteredUsers = null;
+  filteredMadorUsers = null;
+  filteredAdminMadorUsers = null;
   selectedUser = null;
   @Input() currentMador$: Observable<Mador>;
   @Input() currentUser$: Observable<User>;
   @Input() users$: Observable<User[]>;
+  @Input() currentMadorUsers$: Observable<User[]>;
   @ViewChild('madorUsersAutocomplete', {static: false}) matAutocompleteUsers: MatAutocomplete;
   @ViewChild('madorAdminAutocomplete', {static: false}) matAutocompleteAdmin: MatAutocomplete;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
     this.dataService = dataService;
     this.snackBar = snackBar;
-    this.filteredUsers = this.madorUsersChipCtrl.valueChanges.pipe(
+    // TODO: FIX AUTOCOMPLETE AND USERS AND ADMINS OF MADORTOUPDATE
+    this.filteredMadorUsers = this.madorUsersChipCtrl.valueChanges.pipe(
       startWith(null),
-      map((user: string | null) => user && typeof user === 'string' ? this._filterUsers(user) : this.users.slice()));
+      map((user: string | null) => {
+        if (user && typeof user === 'string') {
+          return this._filterUsers(user, this.difference(this.users, this.currentMadorUsers));
+        } else {
+          return this.difference(this.users, this.currentMadorUsers);
+        }
+      }));
+    this.filteredAdminMadorUsers = this.madorAdminUsersChipCtrl.valueChanges.pipe(
+      startWith(null),
+      map((user: string | null) => {
+        if (user && typeof user === 'string') {
+          return this._filterUsers(user, this.currentMadorUsers);
+        } else {
+          return this.users.slice();
+        }
+      }));
   }
 
   ngOnInit() {
     this.usersSubscription = this.users$.subscribe((users) => {
       if (users) {
         this.users = users;
+      }
+    });
+    this.currentMadorUsersSubscription = this.users$.subscribe((currentMadorUsers) => {
+      if (currentMadorUsers) {
+        this.currentMadorUsers = currentMadorUsers;
       }
     });
     this.currentMadorSubscription = this.currentMador$.subscribe((currentMador) => {
@@ -72,6 +99,7 @@ export class ManageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentMadorSubscription.unsubscribe();
+    this.currentMadorUsersSubscription.unsubscribe();
     this.usersSubscription.unsubscribe();
   }
 
@@ -115,10 +143,10 @@ export class ManageComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _filterUsers(value: string): User[] {
+  private _filterUsers(value: string, users: User[]): User[] {
     const filterValue = value.toLowerCase();
 
-    return this.users.filter(
+    return users.filter(
       user => user.username.toLowerCase().indexOf(filterValue) === 0 || user.name.toLowerCase().indexOf(filterValue) === 0
     );
   }
@@ -131,6 +159,7 @@ export class ManageComponent implements OnInit, OnDestroy {
     function remove(tempUser) {
       return tempUser.id !== user.id;
     }
+
     this.madorToUpdate.users = this.madorToUpdate.users.filter(remove);
     this.updateMador();
   }
@@ -149,17 +178,33 @@ export class ManageComponent implements OnInit, OnDestroy {
     function remove(tempUser) {
       return tempUser.id !== user.id;
     }
+
     this.madorToUpdate.admins = this.madorToUpdate.admins.filter(remove);
     this.updateMador();
   }
 
   // TODO: Bug when adding a second user
   addAdminUserToMador() {
-    if (!this.matAutocompleteUsers.isOpen) {
+    if (!this.matAutocompleteAdmin.isOpen) {
       if (this.selectedUser && this.selectedUser.id) {
         this.madorToUpdate.admins.push(this.selectedUser);
         this.updateMador();
       }
     }
+  }
+
+  // Does difference between arrayOne and arrayTwo using id of the objects
+  difference(arrayOne: any[], arrayTwo: any[]) {
+    const arrayOneCopy = [...arrayOne];
+
+    for (let obj of arrayTwo) {
+      // Need i for splice
+      for (let i = 0; i < arrayOneCopy.length; i++) {
+        if (obj.id === arrayOneCopy[i].id) {
+          arrayOneCopy.splice(i, 1);
+        }
+      }
+    }
+    return arrayOneCopy;
   }
 }

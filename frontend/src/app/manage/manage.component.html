@@ -58,14 +58,14 @@
       <input
           #userForumInput
           [formControl]="madorUsersChipCtrl"
-          [matAutocomplete]="auto"
+          [matAutocomplete]="madorUsersAutocomplete"
           [matChipInputFor]="madorUsersChipList"
           [matChipInputSeparatorKeyCodes]="environment.separatorKeysCodes"
           [matChipInputAddOnBlur]="true"
           (matChipInputTokenEnd)="addUserToMador()">
     </mat-chip-list>
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectedUser($event)">
-      <mat-option *ngFor="let user of users$ | async" [value]="user">
+    <mat-autocomplete #madorUsersAutocomplete="matAutocomplete" (optionSelected)="onSelectedUser($event)">
+      <mat-option *ngFor="let user of filteredMadorUsers | async" [value]="user">
         {{user.username}}
       </mat-option>
     </mat-autocomplete>
@@ -84,15 +84,15 @@
       </mat-chip>
       <input
           #userForumInput
-          [formControl]="madorUsersChipCtrl"
-          [matAutocomplete]="auto"
+          [formControl]="madorAdminUsersChipCtrl"
+          [matAutocomplete]="madorAdminAutocomplete"
           [matChipInputFor]="madorUsersChipList"
           [matChipInputSeparatorKeyCodes]="environment.separatorKeysCodes"
           [matChipInputAddOnBlur]="true"
           (matChipInputTokenEnd)="addAdminUserToMador()">
     </mat-chip-list>
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectedUser($event)">
-      <mat-option *ngFor="let user of users$ | async" [value]="user">
+    <mat-autocomplete #madorAdminAutocomplete="matAutocomplete" (optionSelected)="onSelectedUser($event)">
+      <mat-option *ngFor="let user of filteredAdminMadorUsers | async" [value]="user">
         {{user.username}}
       </mat-option>
     </mat-autocomplete>

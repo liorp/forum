@@ -14,7 +14,7 @@
         </mat-card-subtitle>
         <mat-tab-group class="main-page-tab-group" mat-align-tabs="center">
           <mat-tab label="Manage">
-            <app-manage [currentMador$]="currentMador$" [currentUser$]="currentUser$" [users$]="users$"></app-manage>
+            <app-manage [currentMador$]="currentMador$" [currentUser$]="currentUser$" [users$]="users$" [currentMadorUsers$]="currentMadorUsers$"></app-manage>
           </mat-tab>
           <mat-tab label="Forums & Users">
             <app-forum-list [forums$]="forums$" [currentUser$]="currentUser$" [users$]="currentMadorUsers$"></app-forum-list>
