@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  db:
+    image: mysql
+  be:
+    container_name: be
+    build: django
+    command: python manage.py runserver 0.0.0.0:80
+    volumes:
+      - ./django:/backend
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.backend.docker_settings
+  fe:
+    container_name: fe
+    build: angular
+    ports:
+      - "8080:80"
