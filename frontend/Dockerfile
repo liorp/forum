@@ -37,3 +37,6 @@ COPY --from=builder /frontend/dist/out /usr/share/nginx/html
 
 # Copy nginx configuration file.
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
