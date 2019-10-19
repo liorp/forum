@@ -17,7 +17,7 @@
         text-decoration: none; }
     .main-container .main-sidenav-content .main-card {
       height: fit-content;
-      width: 50%;
+      width: 70%;
       margin: 24px auto 24px auto;
       text-align: center; }
       .main-container .main-sidenav-content .main-card .main-content {
@@ -32,7 +32,7 @@
           font-size: 70px;
           font-family: Brush Script MT, Brush Script Std, cursive; }
         .main-container .main-sidenav-content .main-card .main-content .main-page-tab-group {
-          width: 85%; }
+          width: 90%; }
           .main-container .main-sidenav-content .main-card .main-content .main-page-tab-group ::ng-deep .mat-tab-body-content {
             overflow: hidden; }
 
