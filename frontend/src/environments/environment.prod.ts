@@ -4,5 +4,6 @@ export const environment = {
   production: true,
   debounceDelay: 700,
   toastDelay: 700,
-  separatorKeysCodes: [ENTER, COMMA]
+  separatorKeysCodes: [ENTER, COMMA],
+  serverName: 'localhost:8000'
 };

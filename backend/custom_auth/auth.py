@@ -138,5 +138,4 @@ def login_user(request):
         "user": UserSerializer(user).data,
         "token": token.key,
         "mador": MadorSerializer(user.mador).data,
-        "server_name": settings.SERVER_NAME
     })

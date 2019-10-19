@@ -3,22 +3,22 @@
 FROM node:12.12.0-alpine as builder
 LABEL maintainer="Lior Pollak"
 
-# Set working directory.
+# Set working directory
 RUN mkdir /frontend
 WORKDIR /frontend
 
-# Copy app dependencies.
+# Copy app dependencies
 COPY package.json package-lock.json /frontend/
 
 RUN ls /frontend
 
-# Install app dependencies.
+# Install app dependencies
 RUN npm install
 
-# Copy app files.
+# Copy app files
 COPY . /frontend
 
-# Default build configuration.
+# Default build configuration
 ARG configuration=production
 
 # Build app
@@ -32,10 +32,10 @@ FROM nginx:1.17.4-alpine
 # Remove default nginx website
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy output directory from builder to nginx image.
+# Copy output directory from builder to nginx image
 COPY --from=builder /frontend/dist/out /usr/share/nginx/html
 
-# Copy nginx configuration file.
+# Copy nginx configuration file
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

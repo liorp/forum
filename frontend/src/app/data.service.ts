@@ -4,6 +4,7 @@ import {Restangular} from 'ngx-restangular';
 import {Forum} from './forum';
 import {Mador} from './mador';
 import {User} from './user';
+import {environment} from '../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +35,7 @@ export class DataService {
       this.restangular.provider.setDefaultHeaders({Authorization: 'Token ' + data.token});
       this.dataStore.currentUser = data.user;
       this.dataStore.currentMador = data.mador;
-      this.dataStore.serverName = data.server_name;
+      this.dataStore.serverName = environment.serverName;
       this._currentUser.next(JSON.parse(JSON.stringify(this.dataStore)).currentUser);
       this._currentMador.next(JSON.parse(JSON.stringify(this.dataStore)).currentMador);
       this._serverName.next(JSON.parse(JSON.stringify(this.dataStore)).serverName);
