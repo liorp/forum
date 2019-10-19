@@ -22,9 +22,17 @@ def run():
     u3.is_superuser = True
     u3.is_staff = True
     u3.save()
+    u4 = User.objects.create_user('four', name='aaaa', password='bar')
+    u4.is_superuser = True
+    u4.is_staff = True
+    u4.save()
+    u5 = User.objects.create_user('five', name='aaaa', password='bar')
+    u5.is_superuser = True
+    u5.is_staff = True
+    u5.save()
     m.admins.set([u])
     m.save()
-    m.users.set([u, u2, u3])
+    m.users.set([u, u2, u3, u4, u5])
     m.save()
 
     m1 = Mador.objects.create(name="Another mador", total_budget=10, default_budget_per_forum=1)

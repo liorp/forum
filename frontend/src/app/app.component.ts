@@ -28,11 +28,13 @@ export class AppComponent implements OnInit {
   dataService: DataService = null;
   snackBar = null;
   sanitizer = null;
+  version = null;
 
   constructor(dataService: DataService, snackBar: MatSnackBar, sanitizer: DomSanitizer) {
     this.dataService = dataService;
     this.snackBar = snackBar;
     this.sanitizer = sanitizer;
+    this.version = environment.version;
   }
 
   ngOnInit() {

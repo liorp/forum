@@ -44,7 +44,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.usersDataSource.sortingDataAccessor = (item, property) => {
         switch (property) {
           case 'latestForumDate':
-            return new Date(item.latest_forum.date);
+            return item.latest_forum ? new Date(item.latest_forum.date) : null;
           default:
             return item[property];
         }
