@@ -6,7 +6,8 @@
 from rest_framework import viewsets
 
 from custom_auth.models import User, Mador
-from custom_auth.user_serializers import UserSerializer, MadorSerializer
+from custom_auth.user_serializers import UserSerializer
+from custom_auth.mador_serializers import MadorSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -7,12 +7,17 @@ from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 
 from custom_auth.models import User
-from custom_auth.user_serializers import UserSerializer
 from forum.models import Forum
 
 
+class UserForForumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'name']
+
+
 class ForumSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True, read_only=True)
+    users = UserForForumSerializer(many=True, read_only=True)
     # Hacks for writing foreign key to drf
     # (https://stackoverflow.com/questions/29950956/drf-simple-foreign-key-assignment-with-nested-serializers)
     users_id = PrimaryKeyRelatedField(many=True, write_only=True, source='users', queryset=User.objects.all())

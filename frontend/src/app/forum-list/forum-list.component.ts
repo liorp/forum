@@ -31,7 +31,6 @@ export class ForumListComponent implements OnInit, OnDestroy {
   @Input() forums$: Observable<User[]>;
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-  @ViewChild('userForumInput', {static: false}) userInput: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocomplete, {static: false}) matAutocomplete: MatAutocomplete;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {

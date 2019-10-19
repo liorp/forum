@@ -5,8 +5,7 @@
 """
 from rest_framework import serializers
 
-from custom_auth.mador_serializers import MadorSerializer
-from custom_auth.models import User
+from custom_auth.models import User, Mador
 from forum.models import Forum
 
 
@@ -18,15 +17,21 @@ class ForumForUserSerializer(serializers.ModelSerializer):
         fields = ['id', 'date', 'notes', 'users', 'budget']
 
 
+class MadorForUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mador
+        fields = ['id', 'name', 'forum_frequency', 'forum_day',
+                  'number_of_organizers', 'total_budget', 'default_budget_per_forum', 'auto_track_forum_budget']
+
+
 class UserSerializer(serializers.ModelSerializer):
     forum_count = serializers.SerializerMethodField(read_only=True)
     latest_forum = serializers.SerializerMethodField()
-    forums = ForumForUserSerializer(many=True)
-    mador = MadorSerializer()
+    mador = MadorForUserSerializer()
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'name', 'forum_count', 'forums', 'mador', 'is_admin_of_mador', 'latest_forum']
+        fields = ['id', 'username', 'name', 'forum_count', 'mador', 'is_admin_of_mador', 'latest_forum']
 
     def get_forum_count(self, user):
         return user.forums.count()
