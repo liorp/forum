@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatAutocomplete, MatSnackBar, MatSort, MatTable, MatTableDataSource} from '@angular/material';
 import {Forum} from '../forum';
 import {FormControl} from '@angular/forms';
@@ -6,7 +6,7 @@ import {DataService} from '../data.service';
 import {map, startWith} from 'rxjs/operators';
 import {User} from '../user';
 import {Observable} from 'rxjs';
-import { environment } from '../../environments/environment.prod';
+import {environment} from '../../environments/environment.prod';
 import {Mador} from '../mador';
 
 @Component({
@@ -31,6 +31,7 @@ export class ForumListComponent implements OnInit, OnDestroy {
   @Input() forums$: Observable<User[]>;
   @ViewChild(MatTable, {static: false}) forumsTable: MatTable<Forum>;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild('userForumInput', {static: false}) userInput: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocomplete, {static: false}) matAutocomplete: MatAutocomplete;
 
   constructor(dataService: DataService, snackBar: MatSnackBar) {
@@ -38,7 +39,10 @@ export class ForumListComponent implements OnInit, OnDestroy {
     this.snackBar = snackBar;
     this.filteredUsers = this.forumUserChipCtrl.valueChanges.pipe(
       startWith(null),
-      map((user: string | null) => user && typeof user === 'string' ? this._filterUsers(user) : this.users.slice()));
+      map((user: string | null) => {
+        return this._filterUsers(user);
+      })
+    );
   }
 
   ngOnInit() {
@@ -107,9 +111,11 @@ export class ForumListComponent implements OnInit, OnDestroy {
 
   removeUserFromForum(user, forum) {
     const forumCopy = JSON.parse(JSON.stringify(forum));
+
     function remove(tempUser) {
       return tempUser.id !== user.id;
     }
+
     forumCopy.users = forumCopy.users.filter(remove);
     this.updateForum(forumCopy);
   }
@@ -130,10 +136,13 @@ export class ForumListComponent implements OnInit, OnDestroy {
   }
 
   private _filterUsers(value: string): User[] {
-    const filterValue = value.toLowerCase();
-
-    return this.users.filter(
-      user => user.username.toLowerCase().indexOf(filterValue) === 0 || user.name.toLowerCase().indexOf(filterValue) === 0
-    );
+    if (value && typeof value === 'string') {
+      const filterValue = value.toLowerCase();
+      return this.users.filter(
+        user => user.username.toLowerCase().indexOf(filterValue) === 0 || user.name.toLowerCase().indexOf(filterValue) === 0
+      );
+    } else {
+      return this.users.slice();
+    }
   }
 }
