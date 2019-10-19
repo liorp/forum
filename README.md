@@ -28,3 +28,10 @@ We use [SemVer](http://semver.org/) for versioning
 ## Acknowledgments
 
 * Stackoverflow
+
+## TODO list:
+* Add debouncing
+* Add icons of users
+* Change date input to material design
+* Allow to change mador users and admins from the frontend
+

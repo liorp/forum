@@ -11,3 +11,16 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 from backend.settings import *
+
+DATABASES = {
+    'default': {
+        'NAME': 'forums',
+        'ENGINE': 'mysql.connector.django',
+        'HOST': 'database',
+        'USER': 'user',
+        'PASSWORD': 'password',
+        'OPTIONS': {
+          'autocommit': True,
+        },
+    }
+}
