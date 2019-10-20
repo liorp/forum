@@ -24,4 +24,7 @@ COPY . /backend/
 # Copy nginx configuration file
 COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
+COPY ./dummy_init_script.py /backend/dummy_init_script.py
+COPY ./prestart.sh /app/prestart.sh
+
 EXPOSE 80
