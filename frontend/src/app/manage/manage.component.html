@@ -46,7 +46,7 @@
   <mat-form-field class="forum-users-chip-list">
     <mat-label>Mador's users</mat-label>
     <mat-chip-list #madorUsersChipList aria-label="User selection"
-                   [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
+                   [disabled]="true">
       <mat-chip
         *ngFor="let user of (currentMador$ | async)?.users"
         [selectable]="false"
@@ -73,7 +73,7 @@
   <mat-form-field class="forum-users-chip-list">
     <mat-label>Mador's forum admin</mat-label>
     <mat-chip-list #madorAdminUsersChipList aria-label="User selection"
-                   [disabled]="!(currentUser$ | async)?.is_admin_of_mador">
+                   [disabled]="true">
       <mat-chip
         *ngFor="let user of (currentMador$ | async)?.admins"
         [selectable]="false"

@@ -34,4 +34,5 @@ We use [SemVer](http://semver.org/) for versioning
 * Add icons of users
 * Change date input to material design
 * Allow to change mador users and admins from the frontend
-
+* NTLM LDAP
+* Easter eggs
