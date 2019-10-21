@@ -36,3 +36,4 @@ We use [SemVer](http://semver.org/) for versioning
 * Allow to change mador users and admins from the frontend
 * NTLM LDAP
 * Easter eggs
+* Notify user when he was selected for a forum
