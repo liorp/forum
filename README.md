@@ -37,3 +37,4 @@ We use [SemVer](http://semver.org/) for versioning
 * NTLM LDAP
 * Easter eggs
 * Notify user when he was selected for a forum
+* Hotkeys
